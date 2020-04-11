@@ -17,6 +17,12 @@ const GET_LOGOS = gql`
 class HomeScreen extends Component {
 
     render() {
+        let styles = {
+            bannerText: {
+                color: "#000000",
+                fontSize: "20px"
+            },
+        }
         return (
             <Query pollInterval={500} query={GET_LOGOS}>
                 {({ loading, error, data }) => {
@@ -36,8 +42,9 @@ class HomeScreen extends Component {
                             </div>
                             <div className="col s8">
                                 <div id="home_banner_container">
-                                    @todo<br />
-                                    List Maker
+                                    GoLogoLo<br />
+                                   <div id="home_subbanner_container" style={styles.bannerText}> 
+                                   Interactive Logo Maker</div>
                                 </div>
                                 <div>
                                     <Link id="add_logo_button" to="/create">Add Logo</Link>
