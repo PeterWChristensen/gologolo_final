@@ -35,8 +35,9 @@ class CreateLogoScreen extends Component {
         let text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
         return (
             <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/')}>
-                {(addLogo, { loading, error }) => (
+                {(addLogo, { loading, error, data }) => (
                     <div className="container">
+                        <div className="row">
                         <div className="panel panel-default">
                             <div className="panel-heading">
                                 <h4><Link to="/">Home</Link></h4>
@@ -120,6 +121,9 @@ class CreateLogoScreen extends Component {
                                 {loading && <p>Loading...</p>}
                                 {error && <p>Error :( Please try again</p>}
                             </div>
+                        </div>
+                        <div className= "col"> 
+                        </div>
                         </div>
                     </div>
                 )}

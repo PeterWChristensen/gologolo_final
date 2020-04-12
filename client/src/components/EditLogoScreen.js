@@ -62,6 +62,8 @@ class EditLogoScreen extends Component {
                         <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/`)}>
                             {(updateLogo, { loading, error }) => (
                                 <div className="container">
+                                    <div className="row align-items-center">
+                                    <div className="col">
                                     <div className="panel panel-default">
                                         <div className="panel-heading">
                                             <h4><Link to="/">Home</Link></h4>
@@ -143,6 +145,17 @@ class EditLogoScreen extends Component {
                                             </form>
                                             {loading && <p>Loading...</p>}
                                             {error && <p>Error :( Please try again</p>}
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div className= "col" style={{overflow: "auto"}}>
+                                        <div style={{ color: data.logo.color, fontSize: data.logo.fontSize,
+                                                        backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, 
+                                                        borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth,
+                                                        padding: data.logo.padding, margin: data.logo.margin, overflow: "auto",
+                                                        position: "fixed", alignContent: "center", borderStyle: "solid"}}>
+                                                        {data.logo.text}
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
