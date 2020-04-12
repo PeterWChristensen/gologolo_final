@@ -22,6 +22,10 @@ class HomeScreen extends Component {
                 color: "#000000",
                 fontSize: "20px"
             },
+            button: {
+                marginTop: "1em",
+                cursor: "pointer"
+            }
         }
         return (
             <Query pollInterval={500} query={GET_LOGOS}>
@@ -46,9 +50,10 @@ class HomeScreen extends Component {
                                    <div id="home_subbanner_container" style={styles.bannerText}> 
                                    Interactive Logo Maker</div>
                                 </div>
-                                <div>
-                                    <Link id="add_logo_button" to="/create">Add Logo</Link>
-                                </div>
+                                <button
+                                    style={styles.button}>
+                                    <Link id="add_logo_button" to="/create" style={{ textDecoration: 'none', color: "#000000" }}>Create a Logo</Link>
+                                </button>
                             </div>
                         </div>
                     );
