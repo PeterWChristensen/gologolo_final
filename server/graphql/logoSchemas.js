@@ -168,7 +168,7 @@ var mutation = new GraphQLObjectType({
                                                        backgroundColor: params.backgroundColor, borderColor: params.borderColor, borderRadius: params.borderRadius,
                                                        borderWidth: params.borderWidth, padding: params.padding, margin: params.margin, lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);
-                    });
+                    }).exec();
                 }
             },
             removeLogo: {
