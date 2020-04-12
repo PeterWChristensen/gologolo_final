@@ -34,9 +34,10 @@ class HomeScreen extends Component {
                     if (error) return `Error! ${error.message}`;
 
                     return (
-                        <div className="container row">
-                            <div className="col s4">
-                                <h3>Recent Work</h3>
+                        <div className = "container"> 
+                        <div className="row">
+                            <div className="col-auto mt-5 / mr-5">
+                                <h1>Recent Work</h1>
                                 {data.logos.sort(function(a, b){return b.lastUpdate > a.lastUpdate}).map((logo, index) => (
                                     <div key={index} className='home_logo_link'
                                         style={{ cursor: "pointer" }}>
@@ -44,7 +45,7 @@ class HomeScreen extends Component {
                                     </div>
                                 ))}
                             </div>
-                            <div className="col s8">
+                            <div className="col-8 mt-5 / ml-3">
                                 <div id="home_banner_container">
                                     GoLogoLo<br />
                                    <div id="home_subbanner_container" style={styles.bannerText}> 
@@ -52,9 +53,10 @@ class HomeScreen extends Component {
                                 </div>
                                 <button
                                     style={styles.button}>
-                                    <Link id="add_logo_button" to="/create" style={{ textDecoration: 'none', color: "#000000" }}>Create a Logo</Link>
+                                    <Link id="add_logo_button" to="/create" style={{ textDecoration: 'none', color: "#000000" }}>Create a New Logo</Link>
                                 </button>
                             </div>
+                        </div>
                         </div>
                     );
                 }
