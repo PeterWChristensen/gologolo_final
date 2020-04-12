@@ -7,7 +7,7 @@ const ADD_LOGO = gql`
     mutation AddLogo(
         $text: String!,
         $color: String!,
-        $fontSize: Int!
+        $fontSize: Int!,
         $backgroundColor: String!,
         $borderColor: String!,
         $borderRadius: Int!,
