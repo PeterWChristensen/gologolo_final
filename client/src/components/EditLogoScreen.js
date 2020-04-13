@@ -55,7 +55,7 @@ class EditLogoScreen extends Component {
         // VALUES HERE
         this.state = {
             text : null,
-            textColor : null,
+            color : null,
             fontSize : null,
             backgroundColor : null,
             borderColor : null,
@@ -76,7 +76,7 @@ class EditLogoScreen extends Component {
 
     handleTextColorChange = (event) => {
         console.log("handleTextColorChange to " + event.target.value);
-        this.setState({ textColor: event.target.value });
+        this.setState({ color: event.target.value });
     }
 
     handleFontSizeChange = (event) => {

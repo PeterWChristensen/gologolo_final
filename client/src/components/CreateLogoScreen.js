@@ -36,7 +36,7 @@ class CreateLogoScreen extends Component {
          // VALUES HERE
          this.state = {
              text : "GologoLo",
-             textColor : "#000000",
+             color : "#000000",
              fontSize : 30,
              backgroundColor : "#ffffff",
              borderColor : "#000000",
@@ -56,7 +56,7 @@ class CreateLogoScreen extends Component {
  
      handleTextColorChange = (event) => {
          console.log("handleTextColorChange to " + event.target.value);
-         this.setState({ textColor: event.target.value });
+         this.setState({ color: event.target.value });
      }
  
      handleFontSizeChange = (event) => {
