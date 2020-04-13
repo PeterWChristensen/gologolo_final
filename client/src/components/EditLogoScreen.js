@@ -60,7 +60,7 @@ class EditLogoScreen extends Component {
             backgroundColor : null,
             borderColor : null,
             borderRadius : null,
-            borderThickness : null,
+            borderWidth : null,
             borderStyle : "solid",
             padding : null,
             margin : null,
@@ -99,7 +99,7 @@ class EditLogoScreen extends Component {
         this.setState({ borderRadius: event.target.value });
     }
 
-    handleBorderThicknessChange = (event) => {
+    handleBorderWidthChange = (event) => {
         console.log("handleBorderWidthChangeComplete to " + event.target.value);
         this.setState({ borderWidth: event.target.value });
     }
@@ -217,12 +217,12 @@ class EditLogoScreen extends Component {
                                         </div>
                                     </div>
                                     </div>
-                                    <div className= "col" style={{overflow: "auto"}}>
-                                        <div style={{ color: this.state.color, fontSize: this.state.fontSize,
+                                    <div className= "col align-items-center" style={{overflow: "auto"}}>
+                                        <div style={{ color: this.state.color, fontSize: this.state.fontSize + "pt",
                                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
-                                                        borderRadius: this.state.borderRadius, borderWidth: this.state.borderWidth,
-                                                        padding: this.state.padding, margin: this.state.margin, overflow: "auto",
-                                                        position: "fixed", alignContent: "center", borderStyle: "solid"}}>
+                                                        borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
+                                                        padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
+                                                        position: "fixed", textAlign: "center", borderStyle: "solid"}}>
                                                         {this.state.text}
                                         </div>
                                     </div>
