@@ -101,6 +101,7 @@ class CreateLogoScreen extends Component {
                 {(addLogo, { loading, error, data }) => (
                     <div className="container">
                         <div className="row align-items-center">
+                        <div className="col">
                         <div className="panel panel-default">
                             <div className="panel-heading">
                                 <h4><Link to="/">Home</Link></h4>
@@ -139,7 +140,7 @@ class CreateLogoScreen extends Component {
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="fontSize">Font Size:</label>
-                                        <input type="number" className="form-control" name="fontSize" ref={node => {
+                                        <input type="number" min="5" max="100" className="form-control" name="fontSize" ref={node => {
                                             fontSize = node;
                                         }} placeholder="Font Size" defaultValue={30}  onChange={this.handleFontSizeChange}/>
                                     </div>
@@ -157,25 +158,25 @@ class CreateLogoScreen extends Component {
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="borderRadius">Border Radius:</label>
-                                        <input type="number" className="form-control" name="borderRadius" ref={node => {
+                                        <input type="number" min="0" max="100" className="form-control" name="borderRadius" ref={node => {
                                             borderRadius = node;
                                         }} placeholder="Border Radius" defaultValue={50}  onChange={this.handleBorderRadius}/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="borderWidth">Border Width:</label>
-                                        <input type="number" className="form-control" name="borderWidth" ref={node => {
+                                        <input type="number" min="0" max="100" className="form-control" name="borderWidth" ref={node => {
                                             borderWidth = node;
                                         }} placeholder="Border Width" defaultValue={15}  onChange={this.handleBorderWidthChange}/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="padding">Padding:</label>
-                                        <input type="number" className="form-control" name="padding" ref={node => {
+                                        <input type="number" min="0" max="100" className="form-control" name="padding" ref={node => {
                                             padding = node;
                                         }} placeholder="Padding" defaultValue={15}  onChange={this.handlePaddingChange}/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="margin">Margin:</label>
-                                        <input type="number" className="form-control" name="margin" ref={node => {
+                                        <input type="number" min="0" max="100" className="form-control" name="margin" ref={node => {
                                             margin = node;
                                         }} placeholder="Margin" defaultValue={10}  onChange={this.handleMarginChange}/>
                                     </div>
@@ -184,8 +185,9 @@ class CreateLogoScreen extends Component {
                                 {loading && <p>Loading...</p>}
                                 {error && <p>Error :( Please try again</p>}
                             </div>
+                            </div>
                         </div>
-                        <div className= "col" style={{overflow: "auto"}}>
+                        <div className= "col items-align-center" style={{overflow: "auto"}}>
                             <div style={{ color: this.state.color, fontSize: this.state.fontSize + "pt",
                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
