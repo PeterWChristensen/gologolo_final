@@ -1,95 +1,121 @@
-<<<<<<< HEAD
+Get all information about all logos from a specific user:
 
-Query for all logos and attributes:
+    query getAllLogosFromUser{
+        logos(accId: "----INSERT ACCID HERE----:){
+            accId
+            _id
+            text
+            image
+            color
+            fontSize
+            backgroundColor
+            borderColor
+            borderWidth
+            borderRadius
+            padding
+            margin
+            lastUpdate
+        }
+    }
 
-{
-  logos{
-    _id
-    text
-    color
-    fontSize
-    backgroundColor
-    borderColor
-    borderRadius
-    borderWidth
-    padding
-    margin
-    lastUpdate
-  }
-}
+Get one logo using its ID from a specific user:
 
-Query for getting the attributes of a single logo by ID:
+    query getOneLogoById{
+        logo(id:"----INSERT ID HERE----", accId: "----INSERT ACCID HERE----"){
+            accId
+            _id
+            text
+            image
+            color
+            fontSize
+            backgroundColor
+            borderColor
+            borderWidth
+            borderRadius
+            padding
+            margin
+            lastUpdate
+        }
+    }
 
-{
-  logo(id :"5e936cae11e3ce1f7a48c622") {
-    _id
-    text
-    color
-    fontSize
-    backgroundColor
-    borderColor
-    borderRadius
-    borderWidth
-    padding
-    margin
-    lastUpdate
-  }
-}
+Create a new logo:
 
-Mutation for updating a logo:
+    mutation AddLogo{
+        addLogo(
+            text: ["New Logo"],
+            image: ["www.fakeurlimage.com"],
+            color: "#000000",
+            fontSize: 12,
+            backgroundColor: "#FFFFFF",
+            borderColor: "#000000",
+            borderWidth: 12,
+            borderRadius: 12,
+            padding: 12,
+            margin: 12) {
+            accId
+            _id
+        }
+    }
 
-mutation {
-  updateLogo(id: "5e936cae11e3ce1f7a48c622" text: "GoLogoLo1EDITED" color: "#000000" fontSize: 30 backgroundColor: "#ffffff" borderColor: "#000000" borderRadius: 0 borderWidth: 15 padding: 15 margin: 10 ) {
-    _id
-    text
-    color
-    fontSize
-    backgroundColor
-    borderColor
-    borderRadius
-    borderWidth
-    padding
-    margin
-    lastUpdate
-  }
-}
+Edit an existing logo:
 
-Mutation for adding a new logo:
+    mutation updateLogo{
+            updateLogo(
+                accId: "----ACCOUNT ID----",
+                id: "----ID OF LOGO TO UPDATE----",
+                text: ["NEW TEXT"],
+                image: ["www.newurlimage.com"],
+                color: "#000000",
+                fontSize: 12,
+                backgroundColor: "#FFFFFF",
+                borderColor: "#000000",
+                borderWidth: 12,
+                borderRadius: 12,
+                padding: 12,
+                margin: 12) {
+                    lastUpdate
+            }
+    }
 
-mutation{
-  addLogo(text: "NewLogo" color: "#000000" fontSize: 30 backgroundColor: "#ffffff" borderColor: "#000000" borderRadius: 0 borderWidth: 15 padding: 15 margin: 10 ) {
-    _id
-    text
-    color
-    fontSize
-    backgroundColor
-    borderColor
-    borderRadius
-    borderWidth
-    padding
-    margin
-    lastUpdate
-  }
-}
+Get all logos with a text from a specific user:
 
-Mutation for deleting a logo:
+    {
+        getLogoByText(text: "----LOGO TEXT FRAGMENT----", accId: "----INSERT ACCID HERE----"){
+            accId            
+            _id
+            text
+            image
+            color
+            fontSize
+            backgroundColor
+            borderColor
+            borderWidth
+            borderRadius
+            padding
+            margin
+            lastUpdate
+        }
+    }
 
-mutation{
-  removeLogo(id: "5e93e8e4fa46de0a6b92a1b2" ) {
-    _id
-    text
-    color
-    fontSize
-    backgroundColor
-    borderColor
-    borderRadius
-    borderWidth
-    padding
-    margin
-    lastUpdate
-  }
-}
+Get a logos with a text that contains:
 
-=======
-# gologolo_final
->>>>>>> b1c219a3ceae3d71c8e0341392335522fe6e0004
+    {
+        getLogosByTextContains(text: "----LOGO TEXT FRAGMENT----", accId: "----INSERT ACCID HERE----"){
+            accId            
+            _id
+            text
+            image
+            color
+            fontSize
+            backgroundColor
+            borderColor
+            borderWidth
+            borderRadius
+            padding
+            margin
+            lastUpdate
+        }
+    }
+
+    
+
