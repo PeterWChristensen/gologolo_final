@@ -54,6 +54,10 @@ class ViewLogoScreen extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <dl>
+                                        <dt>Height:</dt>
+                                        <dd>{data.logo.height}</dd>
+                                        <dt>Width:</dt>
+                                        <dd>{data.logo.width}</dd>
                                         <dt>Text:</dt>
                                         <dd>{data.logo.text}</dd>
                                         <dt>Color:</dt>
@@ -95,11 +99,11 @@ class ViewLogoScreen extends Component {
                             </div>
                             </div>
                             <div className= "col" style={{overflow: "auto"}}>
-                                <div style={{ height: this.state.height, width: this.state.width, color: data.logo.color, fontSize: data.logo.fontSize,
+                                <div style={{ height: data.logo.height + "px", width: data.logo.width + "px", color: data.logo.color, fontSize: data.logo.fontSize + "pt",
                                           backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, 
-                                          borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth,
-                                          padding: data.logo.padding, margin: data.logo.margin, overflow: "auto",
-                                          position: "fixed", alignContent: "center", borderStyle: "solid"}}>
+                                          borderRadius: data.logo.borderRadius + "px", borderWidth: data.logo.borderWidth + "px",
+                                          padding: data.logo.padding + "px", margin: data.logo.margin + "px", overflow: "auto",
+                                          alignContent: "center", borderStyle: "solid"}}>
                                     {data.logo.text}
                                 </div>
                             </div>

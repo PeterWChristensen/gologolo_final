@@ -18,7 +18,7 @@ const ADD_LOGO = gql`
         $margin: Int!) {
         addLogo(
             height: $height,
-            with: $width,
+            width: $width,
             text: $text,
             color: $color,
             fontSize: $fontSize,

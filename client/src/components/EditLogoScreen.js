@@ -77,6 +77,16 @@ class EditLogoScreen extends Component {
 
     }
 
+    handleHeightChange = (event) => {
+        console.log("handleHeightChange to " + event.target.value);
+        this.setState({ height: event.target.value });
+    }
+
+    handleWidthChange = (event) => {
+        console.log("handleWidthChange to " + event.target.value);
+        this.setState({ width: event.target.value });
+    }
+
     handleTextChange = (event) => {
         console.log("handleTextChange to " + event.target.value);
         this.setState({ text: event.target.value });
@@ -123,14 +133,14 @@ class EditLogoScreen extends Component {
     }
 
     render() {
-        let text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
+        let height, width, text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
         return (
             <Query query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
                 {({ loading, error, data }) => {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
                     if (!this.state.editedFlag)  {
-                        this.setState({text: data.logo.text, color: data.logo.color, fontSize: data.logo.fontSize,
+                        this.setState({ height: data.logo.height, width: data.logo.width, text: data.logo.text, color: data.logo.color, fontSize: data.logo.fontSize,
                         backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, 
                         borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth,
                         padding: data.logo.padding, margin: data.logo.margin, editedFlag : true}) }
@@ -151,9 +161,11 @@ class EditLogoScreen extends Component {
                                         <div className="panel-body">                                            
                                             <form onSubmit={e => {
                                                 e.preventDefault();
-                                                updateLogo({ variables: { id: data.logo._id, text: text.value, color: color.value, fontSize: parseInt(fontSize.value),
+                                                updateLogo({ variables: { id: data.logo._id, height: parseInt(height.value), width: parseInt(width.value), text: text.value, color: color.value, fontSize: parseInt(fontSize.value),
                                                                           backgroundColor: backgroundColor.value, borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value),
                                                                           borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value) } });
+                                                height.value = "";
+                                                width.value = "";
                                                 text.value = "";
                                                 color.value = "";
                                                 fontSize.value = "";
@@ -164,6 +176,18 @@ class EditLogoScreen extends Component {
                                                 padding.value = "";
                                                 margin.value = "";
                                             }}>
+                                                <div className="form-group">
+                                                    <label htmlFor="height">Height:</label>
+                                                    <input type="number" className="form-control" name="height" ref={node => {
+                                                        height= node;
+                                                    }} placeholder="Height" defaultValue={200}  onChange={this.handleHeightChange}/>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="width">Width:</label>
+                                                    <input type="number" className="form-control" name="width" ref={node => {
+                                                        width = node;
+                                                    }} placeholder="Width" defaultValue={500}  onChange={this.handleWidthChange}/>
+                                                </div>
                                                 <div className="form-group">
                                                     <label htmlFor="text">Text:</label>
                                                     <input type="text" className="form-control" name="text" ref={node => {
@@ -225,12 +249,12 @@ class EditLogoScreen extends Component {
                                         </div>
                                     </div>
                                     </div>
-                                    <div className= "col align-items-center" style={{overflow: "auto"}}>
-                                        <div style={{ height: this.state.height, width: this.state.width, color: this.state.color, fontSize: this.state.fontSize + "pt",
+                                    <div className= "col" style={{overflow: "auto"}}>
+                                        <div style={{ height: this.state.height + "px", width: this.state.width + "px", color: this.state.color, fontSize: this.state.fontSize + "pt",
                                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
                                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
-                                                        position: "fixed", textAlign: "center", borderStyle: "solid"}}>
+                                                        alignContent: "center", borderStyle: "solid"}}>
                                                         {this.state.text}
                                         </div>
                                     </div>
