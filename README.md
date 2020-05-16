@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 Query for all logos and attributes:
 
@@ -89,3 +90,6 @@ mutation{
   }
 }
 
+=======
+# gologolo_final
+>>>>>>> b1c219a3ceae3d71c8e0341392335522fe6e0004
