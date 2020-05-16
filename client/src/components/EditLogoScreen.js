@@ -7,6 +7,8 @@ const GET_LOGO = gql`
     query logo($logoId: String) {
         logo(id: $logoId) {
             _id
+            height
+            width
             text
             color
             fontSize
@@ -23,6 +25,8 @@ const GET_LOGO = gql`
 const UPDATE_LOGO = gql`
     mutation updateLogo(
         $id: String!,
+        $height: Int!,
+        $width: Int!,
         $text: String!,
         $color: String!,
         $fontSize: Int!,
@@ -34,6 +38,8 @@ const UPDATE_LOGO = gql`
         $margin: Int!) {
             updateLogo(
                 id: $id,
+                height: $height,
+                width: $width,
                 text: $text,
                 color: $color,
                 fontSize: $fontSize,
@@ -54,6 +60,8 @@ class EditLogoScreen extends Component {
         // WE'LL MANAGE THE UI CONTROL
         // VALUES HERE
         this.state = {
+            height : null,
+            width : null,
             text : null,
             color : null,
             fontSize : null,
@@ -218,7 +226,7 @@ class EditLogoScreen extends Component {
                                     </div>
                                     </div>
                                     <div className= "col align-items-center" style={{overflow: "auto"}}>
-                                        <div style={{ color: this.state.color, fontSize: this.state.fontSize + "pt",
+                                        <div style={{ height: this.state.height, width: this.state.width, color: this.state.color, fontSize: this.state.fontSize + "pt",
                                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
                                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",

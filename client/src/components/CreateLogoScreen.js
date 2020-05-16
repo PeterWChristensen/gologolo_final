@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 
 const ADD_LOGO = gql`
     mutation AddLogo(
+        $height: Int!,
+        $width: Int!,
         $text: String!,
         $color: String!,
         $fontSize: Int!,
@@ -15,6 +17,8 @@ const ADD_LOGO = gql`
         $padding: Int!,
         $margin: Int!) {
         addLogo(
+            height: $height,
+            with: $width,
             text: $text,
             color: $color,
             fontSize: $fontSize,
@@ -35,6 +39,8 @@ class CreateLogoScreen extends Component {
          // WE'LL MANAGE THE UI CONTROL
          // VALUES HERE
          this.state = {
+             height: 200,
+             width: 500,
              text : "GologoLo",
              color : "#000000",
              fontSize : 30,
@@ -47,6 +53,15 @@ class CreateLogoScreen extends Component {
              margin : 10,
          }
  
+     }
+
+     handleHeightChange = (event) => {
+        console.log("handleHeightChange to " + event.target.value);
+        this.setState({ height: event.target.value });
+     }
+     handleWidthChange = (event) => {
+        console.log("handleWidthChange to " + event.target.value);
+        this.setState({ width: event.target.value });
      }
  
      handleTextChange = (event) => {
@@ -95,7 +110,7 @@ class CreateLogoScreen extends Component {
      }
  
     render() {
-        let text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
+        let height, width, text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
         return (
             <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/')}>
                 {(addLogo, { loading, error, data }) => (
@@ -112,10 +127,12 @@ class CreateLogoScreen extends Component {
                             <div className="panel-body">
                                 <form onSubmit={e => {
                                     e.preventDefault();
-                                    addLogo({ variables: { text: text.value, color: color.value, fontSize: parseInt(fontSize.value),
+                                    addLogo({ variables: { height: parseInt(height.value), width: parseInt(width.value), text: text.value, color: color.value, fontSize: parseInt(fontSize.value),
                                                            backgroundColor: backgroundColor.value, borderColor: borderColor.value, 
                                                            borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value),
                                                            padding: parseInt(padding.value), margin: parseInt(margin.value) } });
+                                    height.value = "";
+                                    width.value = "";
                                     text.value = "";
                                     color.value = "";
                                     fontSize.value = "";
@@ -126,6 +143,18 @@ class CreateLogoScreen extends Component {
                                     padding.value = "";
                                     margin.value = "";
                                 }}>
+                                    <div className="form-group">
+                                        <label htmlFor="height">Height:</label>
+                                        <input type="number" className="form-control" name="height" ref={node => {
+                                            height= node;
+                                        }} placeholder="Height" defaultValue={200}  onChange={this.handleHeightChange}/>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="width">Width:</label>
+                                        <input type="number" className="form-control" name="width" ref={node => {
+                                            width = node;
+                                        }} placeholder="Width" defaultValue={500}  onChange={this.handleWidthChange}/>
+                                    </div>
                                     <div className="form-group">
                                         <label htmlFor="text">Text:</label>
                                         <input type="text" className="form-control" name="text" ref={node => {
@@ -188,11 +217,11 @@ class CreateLogoScreen extends Component {
                             </div>
                         </div>
                         <div className= "col items-align-center" style={{overflow: "auto"}}>
-                            <div style={{ color: this.state.color, fontSize: this.state.fontSize + "pt",
+                            <div style={{ height: this.state.height + "px", width: this.state.width + "px", color: this.state.color, fontSize: this.state.fontSize + "pt",
                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
-                                        position: "fixed", alignContent: "center", borderStyle: "solid"}}>
+                                        borderStyle: "solid"}}>
                                         {this.state.text}
                             </div>
                         </div>
