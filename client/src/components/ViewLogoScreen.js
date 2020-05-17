@@ -10,7 +10,7 @@ const GET_LOGO = gql`
             _id
             height
             width
-            text
+            text { text }
             color
             fontSize
             backgroundColor

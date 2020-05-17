@@ -9,7 +9,7 @@ const GET_LOGO = gql`
             _id
             height
             width
-            text
+            text { text }
             color
             fontSize
             backgroundColor
@@ -27,7 +27,7 @@ const UPDATE_LOGO = gql`
         $id: String!,
         $height: Int!,
         $width: Int!,
-        $text: String!,
+        $text: [textInput]!,
         $color: String!,
         $fontSize: Int!,
         $backgroundColor: String!,

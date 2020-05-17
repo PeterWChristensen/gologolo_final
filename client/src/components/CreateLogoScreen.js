@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
+import { Mutation, graphql } from "react-apollo";
 import { Link } from 'react-router-dom';
 
 const ADD_LOGO = gql`
     mutation AddLogo(
         $height: Int!,
         $width: Int!,
-        $text: String!,
+        $text: [textInput]!,
         $color: String!,
         $fontSize: Int!,
         $backgroundColor: String!,
@@ -41,7 +41,7 @@ class CreateLogoScreen extends Component {
          this.state = {
              height: 200,
              width: 500,
-             text : "GologoLo",
+             text : ["GologoLo", "#000000", 30, 50, 50],
              color : "#000000",
              fontSize : 30,
              backgroundColor : "#ffffff",
@@ -222,7 +222,7 @@ class CreateLogoScreen extends Component {
                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
                                         borderStyle: "solid"}}>
-                                        {this.state.text}
+                                        {this.state.text['text']}
                             </div>
                         </div>
                         </div>

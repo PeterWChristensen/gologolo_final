@@ -3,11 +3,60 @@ var GraphQLObjectType = require('graphql').GraphQLObjectType;
 var GraphQLList = require('graphql').GraphQLList;
 var GraphQLObjectType = require('graphql').GraphQLObjectType;
 var GraphQLNonNull = require('graphql').GraphQLNonNull;
+var GraphQLInputObjectType = require('graphql').GraphQLInputObjectType;
 var GraphQLID = require('graphql').GraphQLID;
 var GraphQLString = require('graphql').GraphQLString;
 var GraphQLInt = require('graphql').GraphQLInt;
 var GraphQLDate = require('graphql-date');
 var LogoModel = require('../models/Logo');
+
+
+var textType = new GraphQLObjectType({
+    name: 'text',
+    fields: function () {
+        return {
+            text: {
+                type: GraphQLString
+            },
+            color: {
+                type: GraphQLString
+            },
+            fontSize: {
+                type: GraphQLInt
+            },
+            x: {
+                type: GraphQLInt
+            },
+            y: {
+                type: GraphQLInt
+            }
+        }
+    }
+});
+
+
+var createTextType = new GraphQLInputObjectType({
+    name: 'textInput',
+    fields: function () {
+        return {
+            text: {
+                type: GraphQLString
+            },
+            color: {
+                type: GraphQLString
+            },
+            fontSize: {
+                type: GraphQLInt
+            },
+            x: {
+                type: GraphQLInt
+            },
+            y: {
+                type: GraphQLInt
+            }
+        }
+    }
+});
 
 var logoType = new GraphQLObjectType({
     name: 'logo',
@@ -23,7 +72,7 @@ var logoType = new GraphQLObjectType({
                 type: GraphQLInt
             },
             text: {
-                type: GraphQLString
+                type: new GraphQLList(textType)
             },
             color: {
                 type: GraphQLString
@@ -104,7 +153,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLInt)
                     },
                     text: {
-                        type: new GraphQLNonNull(GraphQLString)
+                        type: new GraphQLNonNull(new GraphQLList(createTextType))
                     },
                     color: {
                         type: new GraphQLNonNull(GraphQLString)
@@ -154,7 +203,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLInt)
                     },
                     text: {
-                        type: new GraphQLNonNull(GraphQLString)
+                        type: new GraphQLNonNull(new GraphQLList(createTextType))
                     },
                     color: {
                         type: new GraphQLNonNull(GraphQLString)
