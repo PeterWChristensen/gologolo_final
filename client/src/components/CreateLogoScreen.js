@@ -29,6 +29,51 @@ const ADD_LOGO = gql`
     }
 `;
 
+class TextOptions extends React.Component{
+    render() {
+    
+        return (
+            <div>
+            { 
+                this.props.text.map((text, index) => {
+                    return (
+            <div className="container">
+                <div className="form-group">
+                    <label htmlFor="text">Text:</label>
+                    <input key={index} type="text" className="form-control" name="text" 
+                    placeholder="Text" defaultValue={this.props.text[index]["text"]}  onChange={(e)=>this.props.handleTextChange(e, index)}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="color">Color:</label>
+                    <input key={index} type="color" className="form-control" name="color" 
+                    placeholder="Color" defaultValue={this.props.text[index]["color"]}  onChange={(e)=>this.props.handleTextColorChange(e, index)}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="fontSize">Font Size:</label>
+                    <input key ={index} type="number" min="5" max="100" className="form-control" name="fontSize" 
+                    placeholder="Font Size" defaultValue={this.props.text[index]["fontSize"]}  onChange={(e)=>this.props.handleFontSizeChange(e, index)}/>
+                </div>
+            </div>
+            )} )
+            }   
+            </div>
+                
+        );
+    }
+}
+class TextDivs extends React.Component {
+    render() {
+        return (
+            <div> 
+                {
+                    this.props.text.map(function(textType) {
+                        return <div style = {{color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
+                    })
+                }
+            </div>
+        );           
+    }
+}
 
 class CreateLogoScreen extends Component {
     constructor() {
@@ -123,66 +168,17 @@ class CreateLogoScreen extends Component {
      }
  
     render() {
-        let height, width, text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
-
-class TextOptions extends React.Component{
-    render() {
-    
-        return (
-            <div>
-            { 
-                this.props.text.map((text, index) => {
-                    return (
-            <div className="container">
-                <div className="form-group">
-                    <label htmlFor="text">Text:</label>
-                    <input key={index} type="text" className="form-control" name="text" ref={node => {
-                        text = node;
-                    }} placeholder="Text" defaultValue={this.props.text[index]["text"]}  onChange={(e)=>this.props.handleTextChange(e, index)}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="color">Color:</label>
-                    <input key={index} type="color" className="form-control" name="color" ref={node => {
-                        color = node;
-                    }} placeholder="Color" defaultValue={this.props.text[index]["color"]}  onChange={(e)=>this.props.handleTextColorChange(e, index)}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="fontSize">Font Size:</label>
-                    <input key ={index} type="number" min="5" max="100" className="form-control" name="fontSize" ref={node => {
-                        fontSize = node;
-                    }} placeholder="Font Size" defaultValue={this.props.text[index]["fontSize"]}  onChange={(e)=>this.props.handleFontSizeChange(e, index)}/>
-                </div>
-            </div>
-            )} )
-            }   
-            </div>
-                
-        );
-    }
-}
-        class TextDivs extends React.Component {
-            render() {
-                return (
-                    <div> 
-                        {
-                            this.props.text.map(function(textType) {
-                                return <div style = {{color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
-                            })
-                        }
-                    </div>
-                );           
-            }
-        }
-
+        let height, width, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
         class AddText extends React.Component {
             render() {
                 return (
-                        <div className="form-group">
+                        <div>
                             <button className="btn btn-primary" onClick={this.props.addText}> Add Text</button>
                         </div>
                 );
             }
         }
+        
         return (
             <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/')}>
                 {(addLogo, { loading, error, data }) => (
@@ -270,7 +266,7 @@ class TextOptions extends React.Component{
                             </div>
                             </div>
                         </div>
-                        <div className= "col items-align-center" style={{overflow: "auto"}}>
+                        <div className= "col" style={{overflow: "auto"}}>
                             <div style={{ height: this.state.height + "px", width: this.state.width + "px", 
                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
