@@ -183,7 +183,7 @@ class CreateLogoScreen extends Component {
             <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/')}>
                 {(addLogo, { loading, error, data }) => (
                     <div className="container">
-                        <div className="row align-items-center">
+                        <div className="row">
                         <div className="col">
                         <div className="panel panel-default">
                             <div className="panel-heading">
@@ -266,11 +266,11 @@ class CreateLogoScreen extends Component {
                             </div>
                             </div>
                         </div>
-                        <div className= "col" style={{overflow: "auto"}}>
+                        <div className= "col" style={{top: "6em", overflow: "auto"}}>
                             <div style={{ height: this.state.height + "px", width: this.state.width + "px", 
                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
-                                        padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
+                                        padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto", position: "sticky",
                                         borderStyle: "solid"}}>
                                         <TextDivs textNum = {this.state.textNum} text = {this.state.text}/>
                             </div>

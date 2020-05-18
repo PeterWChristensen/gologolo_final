@@ -9,9 +9,7 @@ const GET_LOGO = gql`
             _id
             height
             width
-            text { text }
-            color
-            fontSize
+            text { text color fontSize x y}
             backgroundColor
             borderColor
             borderRadius
@@ -28,8 +26,6 @@ const UPDATE_LOGO = gql`
         $height: Int!,
         $width: Int!,
         $text: [textInput]!,
-        $color: String!,
-        $fontSize: Int!,
         $backgroundColor: String!,
         $borderColor: String!,
         $borderRadius: Int!,
@@ -41,8 +37,6 @@ const UPDATE_LOGO = gql`
                 height: $height,
                 width: $width,
                 text: $text,
-                color: $color,
-                fontSize: $fontSize,
                 backgroundColor: $backgroundColor,
                 borderColor: $borderColor,
                 borderRadius: $borderRadius,
@@ -54,6 +48,52 @@ const UPDATE_LOGO = gql`
         }
 `;
 
+class TextOptions extends React.Component{
+    render() {
+    
+        return (
+            <div>
+            { 
+                this.props.text.map((text, index) => {
+                    return (
+            <div className="container">
+                <div className="form-group">
+                    <label htmlFor="text">Text:</label>
+                    <input key={index} type="text" className="form-control" name="text" 
+                    placeholder="Text" defaultValue={this.props.text[index]["text"]}  onChange={(e)=>this.props.handleTextChange(e, index)}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="color">Color:</label>
+                    <input key={index} type="color" className="form-control" name="color" 
+                    placeholder="Color" defaultValue={this.props.text[index]["color"]}  onChange={(e)=>this.props.handleTextColorChange(e, index)}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="fontSize">Font Size:</label>
+                    <input key ={index} type="number" min="5" max="100" className="form-control" name="fontSize" 
+                    placeholder="Font Size" defaultValue={this.props.text[index]["fontSize"]}  onChange={(e)=>this.props.handleFontSizeChange(e, index)}/>
+                </div>
+            </div>
+            )} )
+            }   
+            </div>
+                
+        );
+    }
+}
+class TextDivs extends React.Component {
+    render() {
+        return (
+            <div> 
+                {
+                    this.props.text.map(function(textType) {
+                        return <div style = {{color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
+                    })
+                }
+            </div>
+        );           
+    }
+}
+
 class EditLogoScreen extends Component {
     constructor() {
        super();
@@ -62,9 +102,8 @@ class EditLogoScreen extends Component {
         this.state = {
             height : null,
             width : null,
-            text : null,
-            color : null,
-            fontSize : null,
+            text : [],
+            textNum: 0,
             backgroundColor : null,
             borderColor : null,
             borderRadius : null,
@@ -87,19 +126,28 @@ class EditLogoScreen extends Component {
         this.setState({ width: event.target.value });
     }
 
-    handleTextChange = (event) => {
-        console.log("handleTextChange to " + event.target.value);
-        this.setState({ text: event.target.value });
+    handleTextChange = (event, index) => {
+        console.log("handleTextChange to " + event.target.value + " at index " + index);
+        let oldText = this.state.text[index];
+        oldText["text"] = event.target.value;
+        //console.log(oldText);
+        //console.log(this.state.text);
+        //console.log(this.state.text.splice(index, 1, oldText ));
+        this.setState({ text : this.state.text});
     }
 
-    handleTextColorChange = (event) => {
+    handleTextColorChange = (event, index) => {
         console.log("handleTextColorChange to " + event.target.value);
-        this.setState({ color: event.target.value });
+        let oldText = this.state.text[index];
+        oldText["color"] = event.target.value;
+        this.setState({ text : this.state.text });
     }
 
-    handleFontSizeChange = (event) => {
+    handleFontSizeChange = (event, index) => {
         console.log("handleFontSizeChangeComplete to " + event.target.value);
-        this.setState({ fontSize: event.target.value });
+        let oldText = this.state.text[index];
+        oldText["fontSize"] = parseInt(event.target.value);
+        this.setState({ text : this.state.text});
     }
 
     handleBackgroundColorChange = (event) => {
@@ -131,16 +179,35 @@ class EditLogoScreen extends Component {
         console.log("handleMarginChangeComplete to " + event.target.value);
         this.setState({ margin: event.target.value });
     }
+    addText = () => {
+        let x = this.state.textNum + 1;
+        this.setState( {textNum : x});
+        let list = this.state.text.concat([{ text : "GoLogoLo", color : "#000000", fontSize : 30, x : 500, y : 500}]);
+        this.setState({ text: list});
+        //this.setState({ ["text" + this.state.textNum] : "GoLogoLo", ["color" + this.state.textNum] : "#000000", ["fontSize" + this.state.textNum] : 30})
+ }
 
     render() {
-        let height, width, text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
+        let height, width, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
+        class AddText extends React.Component {
+            render() {
+                return (
+                        <div>
+                            <button className="btn btn-primary" onClick={this.props.addText}> Add Text</button>
+                        </div>
+                );
+            }
+        }
+
         return (
             <Query query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
                 {({ loading, error, data }) => {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
                     if (!this.state.editedFlag)  {
-                        this.setState({ height: data.logo.height, width: data.logo.width, text: data.logo.text, color: data.logo.color, fontSize: data.logo.fontSize,
+                        for (let i = 0; i < data.logo.text.length; i++) 
+                            delete data.logo.text[i]["__typename"];
+                        this.setState({ height: data.logo.height, width: data.logo.width, text: data.logo.text,
                         backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, 
                         borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth,
                         padding: data.logo.padding, margin: data.logo.margin, editedFlag : true}) }
@@ -149,7 +216,7 @@ class EditLogoScreen extends Component {
                         <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/`)}>
                             {(updateLogo, { loading, error }) => (
                                 <div className="container">
-                                    <div className="row align-items-center">
+                                    <div className="row">
                                     <div className="col">
                                     <div className="panel panel-default">
                                         <div className="panel-heading">
@@ -161,14 +228,11 @@ class EditLogoScreen extends Component {
                                         <div className="panel-body">                                            
                                             <form onSubmit={e => {
                                                 e.preventDefault();
-                                                updateLogo({ variables: { id: data.logo._id, height: parseInt(height.value), width: parseInt(width.value), text: text.value, color: color.value, fontSize: parseInt(fontSize.value),
+                                                updateLogo({ variables: { id: data.logo._id, height: parseInt(height.value), width: parseInt(width.value), text: this.state.text,
                                                                           backgroundColor: backgroundColor.value, borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value),
                                                                           borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value) } });
                                                 height.value = "";
                                                 width.value = "";
-                                                text.value = "";
-                                                color.value = "";
-                                                fontSize.value = "";
                                                 backgroundColor.value = "";
                                                 borderColor.value = "";
                                                 borderRadius.value = "";
@@ -188,24 +252,8 @@ class EditLogoScreen extends Component {
                                                         width = node;
                                                     }} placeholder="Width" defaultValue={500}  onChange={this.handleWidthChange}/>
                                                 </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="text">Text:</label>
-                                                    <input type="text" className="form-control" name="text" ref={node => {
-                                                        text = node;
-                                                    }} placeholder="Text" defaultValue={data.logo.text} onChange={this.handleTextChange} />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="color">Color:</label>
-                                                    <input type="color" className="form-control" name="color" ref={node => {
-                                                        color = node;
-                                                    }} placeholder="Color" defaultValue={data.logo.color} onChange={this.handleTextColorChange} />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="fontSize">Font Size:</label>
-                                                    <input type="number" min="5" max="100" className="form-control" name="fontSize" ref={node => {
-                                                        fontSize = node;
-                                                    }} placeholder="Font Size" defaultValue={data.logo.fontSize} onChange={this.handleFontSizeChange} />
-                                                </div>
+                                                <TextOptions textNum = {this.state.textNum} text = {this.state.text} handleTextChange = {this.handleTextChange} handleTextColorChange = {this.handleTextColorChange} handleFontSizeChange = {this.handleFontSizeChange} />
+                                                <AddText addText = {this.addText}/>
                                                 <div className="form-group">
                                                     <label htmlFor="backgroundColor">Background Color:</label>
                                                     <input type="color" className="form-control" name="backgroundColor" ref={node => {
@@ -249,13 +297,13 @@ class EditLogoScreen extends Component {
                                         </div>
                                     </div>
                                     </div>
-                                    <div className= "col" style={{overflow: "auto"}}>
-                                        <div style={{ height: this.state.height + "px", width: this.state.width + "px", color: this.state.color, fontSize: this.state.fontSize + "pt",
+                                    <div className= "col" style={{top: "6em", overflow: "auto"}}>
+                                        <div style={{ height: this.state.height + "px", width: this.state.width + "px",
                                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
                                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
-                                                        alignContent: "center", borderStyle: "solid"}}>
-                                                        {this.state.text}
+                                                        borderStyle: "solid"}}>
+                                                        <TextDivs textNum = {this.state.textNum} text = {this.state.text}/>
                                         </div>
                                     </div>
                                     </div>

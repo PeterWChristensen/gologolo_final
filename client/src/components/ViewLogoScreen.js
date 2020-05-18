@@ -10,9 +10,7 @@ const GET_LOGO = gql`
             _id
             height
             width
-            text { text }
-            color
-            fontSize
+            text { text color fontSize x y}
             backgroundColor
             borderColor
             borderRadius
@@ -32,6 +30,20 @@ const DELETE_LOGO = gql`
   }
 `;
 
+class TextDivs extends React.Component {
+    render() {
+        return (
+            <div> 
+                {
+                    this.props.text.map(function(textType) {
+                        return <div style = {{color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
+                    })
+                }
+            </div>
+        );           
+    }
+}
+
 class ViewLogoScreen extends Component {
 
     render() {
@@ -40,10 +52,13 @@ class ViewLogoScreen extends Component {
                 {({ loading, error, data }) => {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
-
+                    let allText = "";
+                    for(let i = 0; i < data.logo.text.length; i++) {
+                        allText += data.logo.text[i]["text"] + "\n";
+                    }
                     return (
                         <div className="container">
-                            <div className="row align-items-center">
+                            <div className="row ">
                             <div className= "col">
                             <div className="panel panel-default">
                                 <div className="panel-heading">
@@ -59,11 +74,7 @@ class ViewLogoScreen extends Component {
                                         <dt>Width:</dt>
                                         <dd>{data.logo.width}</dd>
                                         <dt>Text:</dt>
-                                        <dd>{data.logo.text}</dd>
-                                        <dt>Color:</dt>
-                                        <dd>{data.logo.color}</dd>
-                                        <dt>Font Size:</dt>
-                                        <dd>{data.logo.fontSize}</dd>
+                                        <dd>{allText}</dd>
                                         <dt>Background Color:</dt>
                                         <dd>{data.logo.backgroundColor}</dd>
                                         <dt>Border Color:</dt>
@@ -98,13 +109,13 @@ class ViewLogoScreen extends Component {
                                 </div>
                             </div>
                             </div>
-                            <div className= "col" style={{overflow: "auto"}}>
-                                <div style={{ height: data.logo.height + "px", width: data.logo.width + "px", color: data.logo.color, fontSize: data.logo.fontSize + "pt",
+                            <div className= "col" style={{top: "6em", overflow: "auto"}}>
+                                <div style={{ height: data.logo.height + "px", width: data.logo.width + "px",
                                           backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, 
                                           borderRadius: data.logo.borderRadius + "px", borderWidth: data.logo.borderWidth + "px",
                                           padding: data.logo.padding + "px", margin: data.logo.margin + "px", overflow: "auto",
-                                          alignContent: "center", borderStyle: "solid"}}>
-                                    {data.logo.text}
+                                          borderStyle: "solid"}}>
+                                          <TextDivs textNum = {data.logo.text.length} text = {data.logo.text}/>
                                 </div>
                             </div>
                             </div>

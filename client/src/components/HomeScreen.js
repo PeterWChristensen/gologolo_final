@@ -38,12 +38,20 @@ class HomeScreen extends Component {
                         <div className="row">
                             <div className="col-auto mt-5 / mr-5">
                                 <h1>Recent Work</h1>
-                                {data.logos.sort(function(a, b){return b.lastUpdate > a.lastUpdate}).map((logo, index) => (
+                                {data.logos.sort(function(a, b){return b.lastUpdate > a.lastUpdate}).map((logo, index) => {
+                                    let allText = "";
+                                    for(let i = 0; i < logo.text.length; i++) {
+                                        allText += logo.text[i]["text"] + "\n";
+                                    }
+                                    if (!allText)
+                                        allText = "untitled";
+                                    return (
                                     <div key={index} className='home_logo_link'
                                         style={{ cursor: "pointer" }}>
-                                        <Link to={`/view/${logo._id}`}>{logo.text}</Link>
-                                    </div>
-                                ))}
+                                            {console.log(logo)}
+                                        <Link to={`/view/${logo._id}`}>{allText}</Link>
+                                    </div>)
+                             })}
                             </div>
                             <div className="col-8 mt-5 / ml-3">
                                 <div id="home_banner_container">
