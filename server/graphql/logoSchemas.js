@@ -188,7 +188,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(new GraphQLList(createTextType))
                     },
                     images: {
-                        type: new GraphQLList(new GraphQLNonNull(createImageType))
+                        type: new GraphQLNonNull(new GraphQLList(createImageType))
                     },
                     backgroundColor: {
                         type: new GraphQLNonNull(GraphQLString)
@@ -235,7 +235,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(new GraphQLList(createTextType))
                     },
                     images: {
-                        type: new GraphQLList(new GraphQLNonNull(createImageType))
+                        type: new GraphQLNonNull(new GraphQLList(createImageType))
                     },
                     backgroundColor: {
                         type: new GraphQLNonNull(GraphQLString)

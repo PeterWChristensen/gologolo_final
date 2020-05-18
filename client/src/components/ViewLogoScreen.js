@@ -11,6 +11,7 @@ const GET_LOGO = gql`
             height
             width
             text { text color fontSize x y}
+            images {url}
             backgroundColor
             borderColor
             borderRadius
@@ -43,6 +44,19 @@ class TextDivs extends React.Component {
         );           
     }
 }
+class ImageDivs extends React.Component {
+    render() {
+        return (
+            <div>
+                {
+                    this.props.images.map(function(image) {
+                       return <img src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
+                    })
+                }
+            </div>
+        );
+    }
+}
 
 class ViewLogoScreen extends Component {
 
@@ -55,6 +69,10 @@ class ViewLogoScreen extends Component {
                     let allText = "";
                     for(let i = 0; i < data.logo.text.length; i++) {
                         allText += data.logo.text[i]["text"] + "\n";
+                    }
+                    let allURLS = "";
+                    for(let i = 0; i < data.logo.images.length; i++) {
+                        allURLS += data.logo.images[i]["url"] + "\n";
                     }
                     return (
                         <div className="container">
@@ -75,6 +93,8 @@ class ViewLogoScreen extends Component {
                                         <dd>{data.logo.width}</dd>
                                         <dt>Text:</dt>
                                         <dd>{allText}</dd>
+                                        <dt>Images:</dt>
+                                        <dd>{allURLS}</dd>
                                         <dt>Background Color:</dt>
                                         <dd>{data.logo.backgroundColor}</dd>
                                         <dt>Border Color:</dt>
@@ -116,6 +136,7 @@ class ViewLogoScreen extends Component {
                                           padding: data.logo.padding + "px", margin: data.logo.margin + "px", overflow: "auto",
                                           borderStyle: "solid"}}>
                                           <TextDivs textNum = {data.logo.text.length} text = {data.logo.text}/>
+                                          <ImageDivs images = {data.logo.images}/>
                                 </div>
                             </div>
                             </div>

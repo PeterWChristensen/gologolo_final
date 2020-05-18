@@ -10,6 +10,7 @@ const GET_LOGO = gql`
             height
             width
             text { text color fontSize x y}
+            images { url width height}
             backgroundColor
             borderColor
             borderRadius
@@ -26,6 +27,7 @@ const UPDATE_LOGO = gql`
         $height: Int!,
         $width: Int!,
         $text: [textInput]!,
+        $images: [imageInput]!,
         $backgroundColor: String!,
         $borderColor: String!,
         $borderRadius: Int!,
@@ -37,6 +39,7 @@ const UPDATE_LOGO = gql`
                 height: $height,
                 width: $width,
                 text: $text,
+                images: $images,
                 backgroundColor: $backgroundColor,
                 borderColor: $borderColor,
                 borderRadius: $borderRadius,
@@ -95,6 +98,51 @@ class TextDivs extends React.Component {
     }
 }
 
+
+class ImageOptions extends React.Component {
+    render() {
+        return (
+            <div>
+                {
+                this.props.images.map((images, index) => {
+                    return (
+                        <div className="container" style={{margin : "1em"}}> 
+                            <div className="form-group">                           
+                                <label htmlFor="width">Width:</label>
+                                <input type="range" min="1" max="1500" defaultValue={this.props.images[index]["width"]}
+                                 onChange={(e)=>this.props.handleImageWidthChange(e, index)}/>
+                            </div>
+                            <div className="form-group">                           
+                                <label htmlFor="height">Height</label>
+                                <input type="range" min="1" max="1500" defaultValue={this.props.images[index]["height"]}
+                                 onChange={(e)=>this.props.handleImageHeightChange(e, index)}/>
+                            </div>
+                            <button className="btn btn-primary" onClick={(e)=>this.props.handleDeleteImage(index)}>Delete Image</button>
+                        </div>
+                    )
+
+                })
+                }
+            </div>
+        );
+    }
+}
+
+class ImageDivs extends React.Component {
+    render() {
+        return (
+            <div>
+                {
+                    this.props.images.map(function(image) {
+                       return <img src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
+                    })
+                }
+            </div>
+        );
+    }
+}
+
+
 class EditLogoScreen extends Component {
     constructor() {
        super();
@@ -105,6 +153,7 @@ class EditLogoScreen extends Component {
             width : null,
             text : [],
             textNum: 0,
+            images: [],
             backgroundColor : null,
             borderColor : null,
             borderRadius : null,
@@ -192,6 +241,30 @@ class EditLogoScreen extends Component {
         this.setState({ text : this.state.text});
     }
 
+    addImage = (newURL) => {
+        let newImage = this.state.images.concat([{ url : newURL, width : 500, height : 500}]);
+        this.setState({ images: newImage});
+     }
+
+     handleImageWidthChange = (event, index) => {
+        console.log("handlehandleImageWidthChangeComplete to " + event.target.value);
+         let oldImage = this.state.images[index];
+         oldImage["width"] = event.target.value;
+         this.setState({ images : this.state.images});
+     }
+
+     handleImageHeightChange = (event, index) => {
+        console.log("handlehandleImageHeightChangeComplete to " + event.target.value);
+        let oldImage = this.state.images[index];
+        oldImage["height"] = event.target.value;
+        this.setState({ images : this.state.images});
+    }
+
+     handleDeleteImage = (index) => {
+         delete this.state.images[index];
+         this.setState({ images : this.state.images});
+     }
+
     render() {
         let height, width, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
         class AddText extends React.Component {
@@ -199,6 +272,17 @@ class EditLogoScreen extends Component {
                 return (
                         <div>
                             <button className="btn btn-primary" onClick={this.props.addText}> Add Text</button>
+                        </div>
+                );
+            }
+        }
+        class AddImage extends React.Component {
+            render() {
+                let url = "";
+                return (
+                        <div style={{margin:"1em"}}>
+                            <input type="text" placeholder="Image URL" onChange={(event) => {url = event.target.value}}/>
+                            <button className="btn btn-primary" onClick={(e)=>this.props.addImage(url)}> Add Image</button>
                         </div>
                 );
             }
@@ -212,7 +296,9 @@ class EditLogoScreen extends Component {
                     if (!this.state.editedFlag)  {
                         for (let i = 0; i < data.logo.text.length; i++) 
                             delete data.logo.text[i]["__typename"];
-                        this.setState({ height: data.logo.height, width: data.logo.width, text: data.logo.text,
+                        for (let i = 0; i < data.logo.images.length; i++) 
+                            delete data.logo.images[i]["__typename"];
+                        this.setState({ height: data.logo.height, width: data.logo.width, text: data.logo.text, images: data.logo.images,
                         backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, 
                         borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth,
                         padding: data.logo.padding, margin: data.logo.margin, editedFlag : true}) }
@@ -233,7 +319,7 @@ class EditLogoScreen extends Component {
                                         <div className="panel-body">                                            
                                             <form onSubmit={e => {
                                                 e.preventDefault();
-                                                updateLogo({ variables: { id: data.logo._id, height: parseInt(height.value), width: parseInt(width.value), text: this.state.text,
+                                                updateLogo({ variables: { id: data.logo._id, height: parseInt(height.value), width: parseInt(width.value), text: this.state.text, images: this.state.images,
                                                                           backgroundColor: backgroundColor.value, borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value),
                                                                           borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value) } });
                                                 height.value = "";
@@ -259,6 +345,8 @@ class EditLogoScreen extends Component {
                                                 </div>
                                                 <TextOptions textNum = {this.state.textNum} text = {this.state.text} handleDeleteTextOptions = {this.handleDeleteTextOptions} handleTextChange = {this.handleTextChange} handleTextColorChange = {this.handleTextColorChange} handleFontSizeChange = {this.handleFontSizeChange} />
                                                 <AddText addText = {this.addText}/>
+                                                <ImageOptions images = {this.state.images} handleImageHeightChange = {this.handleImageHeightChange} handleImageWidthChange = {this.handleImageWidthChange} handleDeleteImage = {this.handleDeleteImage}/>
+                                                <AddImage addImage = {this.addImage}/>  
                                                 <div className="form-group">
                                                     <label htmlFor="backgroundColor">Background Color:</label>
                                                     <input type="color" className="form-control" name="backgroundColor" ref={node => {
@@ -309,6 +397,7 @@ class EditLogoScreen extends Component {
                                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
                                                         borderStyle: "solid"}}>
                                                         <TextDivs textNum = {this.state.textNum} text = {this.state.text}/>
+                                                        <ImageDivs images = {this.state.images}/>
                                         </div>
                                     </div>
                                     </div>
