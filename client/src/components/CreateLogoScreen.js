@@ -39,7 +39,7 @@ class CreateLogoScreen extends Component {
              height: 200,
              width: 500,
              textNum: 0,
-             text : [{ text : "GoLogoLo", color : "#000000", fontSize : 30, x : 500, y : 500}], 
+             text : [], 
              backgroundColor : "#ffffff",
              borderColor : "#000000",
              borderRadius : 50,
@@ -60,19 +60,28 @@ class CreateLogoScreen extends Component {
         this.setState({ width: event.target.value });
      }
  
-     handleTextChange = (event) => {
-         console.log("handleTextChange to " + event.target.value);
-         this.setState({ text: event.target.value });
+     handleTextChange = (event, index) => {
+         console.log("handleTextChange to " + event.target.value + " at index " + index);
+         let oldText = this.state.text[index];
+         oldText["text"] = event.target.value;
+         //console.log(oldText);
+         //console.log(this.state.text);
+         //console.log(this.state.text.splice(index, 1, oldText ));
+         this.setState({ text : this.state.text});
      }
  
-     handleTextColorChange = (event) => {
+     handleTextColorChange = (event, index) => {
          console.log("handleTextColorChange to " + event.target.value);
-         this.setState({ color: event.target.value });
+         let oldText = this.state.text[index];
+         oldText["color"] = event.target.value;
+         this.setState({ text : this.state.text });
      }
  
-     handleFontSizeChange = (event) => {
+     handleFontSizeChange = (event, index) => {
          console.log("handleFontSizeChangeComplete to " + event.target.value);
-         this.setState({ fontSize: event.target.value });
+         let oldText = this.state.text[index];
+         oldText["fontSize"] = event.target.value;
+         this.setState({ text : this.state.text});
      }
  
      handleBackgroundColorChange = (event) => {
@@ -121,30 +130,33 @@ class TextOptions extends React.Component{
     
         return (
             <div>
-            { Array(this.props.textNum).fill(
+            { 
+                this.props.text.map((text, index) => {
+                    return (
             <div className="container">
                 <div className="form-group">
                     <label htmlFor="text">Text:</label>
-                    <input type="text" className="form-control" name="text" ref={node => {
+                    <input key={index} type="text" className="form-control" name="text" ref={node => {
                         text = node;
-                    }} placeholder="Text" defaultValue={"GoLogoLo"}  onChange={this.props.handleTextChange}/>
+                    }} placeholder="Text" defaultValue={this.props.text[index]["text"]}  onChange={(e)=>this.props.handleTextChange(e, index)}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="color">Color:</label>
-                    <input type="color" className="form-control" name="color" ref={node => {
+                    <input key={index} type="color" className="form-control" name="color" ref={node => {
                         color = node;
-                    }} placeholder="Color" defaultValue={"#000000"}  onChange={this.props.handleTextColorChange}/>
+                    }} placeholder="Color" defaultValue={this.props.text[index]["color"]}  onChange={(e)=>this.props.handleTextColorChange(e, index)}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="fontSize">Font Size:</label>
-                    <input type="number" min="5" max="100" className="form-control" name="fontSize" ref={node => {
+                    <input key ={index} type="number" min="5" max="100" className="form-control" name="fontSize" ref={node => {
                         fontSize = node;
-                    }} placeholder="Font Size" defaultValue={30}  onChange={this.props.handleFontSizeChange}/>
+                    }} placeholder="Font Size" defaultValue={this.props.text[index]["fontSize"]}  onChange={(e)=>this.props.handleFontSizeChange(e, index)}/>
                 </div>
-            </div> 
-            )}
-                            
             </div>
+            )} )
+            }   
+            </div>
+                
         );
     }
 }
@@ -154,11 +166,10 @@ class TextOptions extends React.Component{
                     <div> 
                         {
                             this.props.text.map(function(textType) {
-                                return <div> {textType["text"]}</div>
+                                return <div style = {{color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
                             })
                         }
                     </div>
-
                 );           
             }
         }
@@ -214,7 +225,7 @@ class TextOptions extends React.Component{
                                             width = node;
                                         }} placeholder="Width" defaultValue={500}  onChange={this.handleWidthChange}/>
                                     </div>
-                                    <TextOptions textNum = {this.state.textNum} handleTextChange = {this.handleTextChange} handleTextColorChange = {this.handleTextColorChange} handleFontSizeChange = {this.handleFontSizeChange} />
+                                    <TextOptions textNum = {this.state.textNum} text = {this.state.text} handleTextChange = {this.handleTextChange} handleTextColorChange = {this.handleTextColorChange} handleFontSizeChange = {this.handleFontSizeChange} />
                                     <AddText addText = {this.addText}/>
                                     <div className="form-group">
                                         <label htmlFor="backgroundColor">Background Color:</label>
