@@ -33,6 +33,7 @@ const ADD_LOGO = gql`
     }
 `;
 
+
 class CreateLogoScreen extends Component {
     constructor() {
         super();
@@ -41,7 +42,8 @@ class CreateLogoScreen extends Component {
          this.state = {
              height: 200,
              width: 500,
-             text : ["GologoLo", "#000000", 30, 50, 50],
+             textNum: 0,
+             text : [["GoLogoLo", "#000000", 30, 500, 500]], 
              color : "#000000",
              fontSize : 30,
              backgroundColor : "#ffffff",
@@ -108,9 +110,62 @@ class CreateLogoScreen extends Component {
          console.log("handleMarginChangeComplete to " + event.target.value);
          this.setState({ margin: event.target.value });
      }
+
+     addText = () => {
+            let x = this.state.textNum + 1;
+            this.setState( {textNum : x});
+            let list = this.state.text.concat([["GoLogoLo", "#000000", 30, 500, 500]]);
+            this.setState({ text: list});
+            //this.setState({ ["text" + this.state.textNum] : "GoLogoLo", ["color" + this.state.textNum] : "#000000", ["fontSize" + this.state.textNum] : 30})
+     }
  
     render() {
         let height, width, text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
+
+class TextOptions extends React.Component{
+    render() {
+    
+        return (
+            <div>
+            { Array(this.props.textNum).fill(
+            <div className="container">
+                <div className="form-group">
+                    <label htmlFor="text">Text:</label>
+                    <input type="text" className="form-control" name="text" ref={node => {
+                        text = node;
+                    }} placeholder="Text" defaultValue={"GoLogoLo"}  onChange={this.handleTextChange}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="color">Color:</label>
+                    <input type="color" className="form-control" name="color" ref={node => {
+                        color = node;
+                    }} placeholder="Color" defaultValue={"#000000"}  onChange={this.handleTextColorChange}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="fontSize">Font Size:</label>
+                    <input type="number" min="5" max="100" className="form-control" name="fontSize" ref={node => {
+                        fontSize = node;
+                    }} placeholder="Font Size" defaultValue={30}  onChange={this.handleFontSizeChange}/>
+                </div>
+            </div> 
+            )}
+                            
+            </div>
+        );
+    }
+}
+
+        class AddText extends React.Component {
+            render() {
+                return (
+                    <form className="form-inline">
+                        <div className="form-group">
+                            <button className="btn btn-primary" onClick={this.props.addText}> Add Text</button>
+                        </div>
+                    </form>
+                );
+            }
+        }
         return (
             <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/')}>
                 {(addLogo, { loading, error, data }) => (
@@ -127,15 +182,12 @@ class CreateLogoScreen extends Component {
                             <div className="panel-body">
                                 <form onSubmit={e => {
                                     e.preventDefault();
-                                    addLogo({ variables: { height: parseInt(height.value), width: parseInt(width.value), text: text.value, color: color.value, fontSize: parseInt(fontSize.value),
+                                    addLogo({ variables: { height: parseInt(height.value), width: parseInt(width.value), text: this.state.text,
                                                            backgroundColor: backgroundColor.value, borderColor: borderColor.value, 
                                                            borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value),
                                                            padding: parseInt(padding.value), margin: parseInt(margin.value) } });
                                     height.value = "";
                                     width.value = "";
-                                    text.value = "";
-                                    color.value = "";
-                                    fontSize.value = "";
                                     backgroundColor.value = "";
                                     borderColor.value = "";
                                     borderRadius.value = "";
@@ -155,24 +207,8 @@ class CreateLogoScreen extends Component {
                                             width = node;
                                         }} placeholder="Width" defaultValue={500}  onChange={this.handleWidthChange}/>
                                     </div>
-                                    <div className="form-group">
-                                        <label htmlFor="text">Text:</label>
-                                        <input type="text" className="form-control" name="text" ref={node => {
-                                            text = node;
-                                        }} placeholder="Text" defaultValue={"GoLogoLo"}  onChange={this.handleTextChange}/>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="color">Color:</label>
-                                        <input type="color" className="form-control" name="color" ref={node => {
-                                            color = node;
-                                        }} placeholder="Color" defaultValue={"#000000"}  onChange={this.handleTextColorChange}/>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="fontSize">Font Size:</label>
-                                        <input type="number" min="5" max="100" className="form-control" name="fontSize" ref={node => {
-                                            fontSize = node;
-                                        }} placeholder="Font Size" defaultValue={30}  onChange={this.handleFontSizeChange}/>
-                                    </div>
+                                    <TextOptions textNum = {this.state.textNum} />
+                                    <AddText addText = {this.addText}/>
                                     <div className="form-group">
                                         <label htmlFor="backgroundColor">Background Color:</label>
                                         <input type="color" className="form-control" name="backgroundColor" ref={node => {
@@ -222,7 +258,9 @@ class CreateLogoScreen extends Component {
                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
                                         borderStyle: "solid"}}>
+                                        <div> 
                                         {this.state.text['text']}
+                                        </div>
                             </div>
                         </div>
                         </div>
