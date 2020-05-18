@@ -74,6 +74,9 @@ var logoType = new GraphQLObjectType({
             text: {
                 type: new GraphQLList(textType)
             },
+            images: {
+                type: new GraphQLList(GraphQLString)
+            },
             backgroundColor: {
                 type: GraphQLString
             },
@@ -149,6 +152,9 @@ var mutation = new GraphQLObjectType({
                     text: {
                         type: new GraphQLNonNull(new GraphQLList(createTextType))
                     },
+                    images: {
+                        type: new GraphQLList(new GraphQLNonNull (GraphQLString))
+                    },
                     backgroundColor: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
@@ -193,6 +199,9 @@ var mutation = new GraphQLObjectType({
                     text: {
                         type: new GraphQLNonNull(new GraphQLList(createTextType))
                     },
+                    images: {
+                        type: new GraphQLList(new GraphQLNonNull(GraphQLString))
+                    },
                     backgroundColor: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
@@ -213,7 +222,7 @@ var mutation = new GraphQLObjectType({
                     }
                 },
                 resolve(root, params) {
-                    return LogoModel.findByIdAndUpdate(params.id, { height: params.height, width: params.width, text: params.text, color: params.color, fontSize: params.fontSize,
+                    return LogoModel.findByIdAndUpdate(params.id, { height: params.height, width: params.width, text: params.text, images: params.images,
                                                        backgroundColor: params.backgroundColor, borderColor: params.borderColor, borderRadius: params.borderRadius,
                                                        borderWidth: params.borderWidth, padding: params.padding, margin: params.margin, lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);

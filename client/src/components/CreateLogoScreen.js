@@ -62,6 +62,21 @@ class TextOptions extends React.Component{
         );
     }
 }
+
+class ImageDivs extends React.Component {
+    render() {
+        return (
+            <div>
+                {
+                    this.props.images.map(function(url) {
+                       return <img src={url} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png"/>
+                    })
+                }
+            </div>
+        );
+    }
+}
+
 class TextDivs extends React.Component {
     render() {
         return (
@@ -86,6 +101,7 @@ class CreateLogoScreen extends Component {
              width: 500,
              textNum: 0,
              text : [], 
+             images : [],
              backgroundColor : "#ffffff",
              borderColor : "#000000",
              borderRadius : 50,
@@ -167,6 +183,11 @@ class CreateLogoScreen extends Component {
             this.setState({ text: list});
             //this.setState({ ["text" + this.state.textNum] : "GoLogoLo", ["color" + this.state.textNum] : "#000000", ["fontSize" + this.state.textNum] : 30})
      }
+
+     addImage = (url) => {
+        let urls = this.state.images.concat(url);
+        this.setState({ images: urls});
+     }
  
      handleDeleteTextOptions = (index) => {
          delete this.state.text[index];
@@ -180,6 +201,17 @@ class CreateLogoScreen extends Component {
                 return (
                         <div>
                             <button className="btn btn-primary" onClick={this.props.addText}> Add Text</button>
+                        </div>
+                );
+            }
+        }
+        class AddImage extends React.Component {
+            render() {
+                let url = "";
+                return (
+                        <div>
+                            <input type="text" placeholder="Image URL" onChange={(event) => {url = event.target.value}}/>
+                            <button className="btn btn-primary" onClick={(e)=>this.props.addImage(url)}> Add Image</button>
                         </div>
                 );
             }
@@ -229,6 +261,7 @@ class CreateLogoScreen extends Component {
                                     </div>
                                     <TextOptions textNum = {this.state.textNum} text = {this.state.text} handleDeleteTextOptions = {this.handleDeleteTextOptions} handleTextChange = {this.handleTextChange} handleTextColorChange = {this.handleTextColorChange} handleFontSizeChange = {this.handleFontSizeChange} />
                                     <AddText addText = {this.addText}/>
+                                    <AddImage addImage = {this.addImage}/>
                                     <div className="form-group">
                                         <label htmlFor="backgroundColor">Background Color:</label>
                                         <input type="color" className="form-control" name="backgroundColor" ref={node => {
@@ -279,6 +312,7 @@ class CreateLogoScreen extends Component {
                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto", position: "sticky",
                                         borderStyle: "solid"}}>
                                         <TextDivs textNum = {this.state.textNum} text = {this.state.text}/>
+                                        <ImageDivs images = {this.state.images}/>
                             </div>
                         </div>
                         </div>
