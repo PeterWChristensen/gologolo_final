@@ -56,7 +56,7 @@ class TextOptions extends React.Component{
             { 
                 this.props.text.map((text, index) => {
                     return (
-            <div className="container">
+            <div className="container" style={{margin:"1em"}}>
                 <div className="form-group">
                     <label htmlFor="text">Text:</label>
                     <input key={index} type="text" className="form-control" name="text" 
@@ -72,6 +72,7 @@ class TextOptions extends React.Component{
                     <input key ={index} type="number" min="5" max="100" className="form-control" name="fontSize" 
                     placeholder="Font Size" defaultValue={this.props.text[index]["fontSize"]}  onChange={(e)=>this.props.handleFontSizeChange(e, index)}/>
                 </div>
+                <button className="btn btn-primary" onClick={(e)=>this.props.handleDeleteTextOptions(index)}>Delete Text</button>
             </div>
             )} )
             }   
@@ -185,7 +186,11 @@ class EditLogoScreen extends Component {
         let list = this.state.text.concat([{ text : "GoLogoLo", color : "#000000", fontSize : 30, x : 500, y : 500}]);
         this.setState({ text: list});
         //this.setState({ ["text" + this.state.textNum] : "GoLogoLo", ["color" + this.state.textNum] : "#000000", ["fontSize" + this.state.textNum] : 30})
- }
+    }
+    handleDeleteTextOptions = (index) => {
+        delete this.state.text[index];
+        this.setState({ text : this.state.text});
+    }
 
     render() {
         let height, width, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
@@ -252,7 +257,7 @@ class EditLogoScreen extends Component {
                                                         width = node;
                                                     }} placeholder="Width" defaultValue={500}  onChange={this.handleWidthChange}/>
                                                 </div>
-                                                <TextOptions textNum = {this.state.textNum} text = {this.state.text} handleTextChange = {this.handleTextChange} handleTextColorChange = {this.handleTextColorChange} handleFontSizeChange = {this.handleFontSizeChange} />
+                                                <TextOptions textNum = {this.state.textNum} text = {this.state.text} handleDeleteTextOptions = {this.handleDeleteTextOptions} handleTextChange = {this.handleTextChange} handleTextColorChange = {this.handleTextColorChange} handleFontSizeChange = {this.handleFontSizeChange} />
                                                 <AddText addText = {this.addText}/>
                                                 <div className="form-group">
                                                     <label htmlFor="backgroundColor">Background Color:</label>
