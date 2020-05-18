@@ -8,8 +8,6 @@ const ADD_LOGO = gql`
         $height: Int!,
         $width: Int!,
         $text: [textInput]!,
-        $color: String!,
-        $fontSize: Int!,
         $backgroundColor: String!,
         $borderColor: String!,
         $borderRadius: Int!,
@@ -20,8 +18,6 @@ const ADD_LOGO = gql`
             height: $height,
             width: $width,
             text: $text,
-            color: $color,
-            fontSize: $fontSize,
             backgroundColor: $backgroundColor,
             borderColor: $borderColor,
             borderRadius: $borderRadius,
@@ -43,9 +39,7 @@ class CreateLogoScreen extends Component {
              height: 200,
              width: 500,
              textNum: 0,
-             text : [["GoLogoLo", "#000000", 30, 500, 500]], 
-             color : "#000000",
-             fontSize : 30,
+             text : [{ text : "GoLogoLo", color : "#000000", fontSize : 30, x : 500, y : 500}], 
              backgroundColor : "#ffffff",
              borderColor : "#000000",
              borderRadius : 50,
@@ -114,7 +108,7 @@ class CreateLogoScreen extends Component {
      addText = () => {
             let x = this.state.textNum + 1;
             this.setState( {textNum : x});
-            let list = this.state.text.concat([["GoLogoLo", "#000000", 30, 500, 500]]);
+            let list = this.state.text.concat([{ text : "GoLogoLo", color : "#000000", fontSize : 30, x : 500, y : 500}]);
             this.setState({ text: list});
             //this.setState({ ["text" + this.state.textNum] : "GoLogoLo", ["color" + this.state.textNum] : "#000000", ["fontSize" + this.state.textNum] : 30})
      }
@@ -133,19 +127,19 @@ class TextOptions extends React.Component{
                     <label htmlFor="text">Text:</label>
                     <input type="text" className="form-control" name="text" ref={node => {
                         text = node;
-                    }} placeholder="Text" defaultValue={"GoLogoLo"}  onChange={this.handleTextChange}/>
+                    }} placeholder="Text" defaultValue={"GoLogoLo"}  onChange={this.props.handleTextChange}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="color">Color:</label>
                     <input type="color" className="form-control" name="color" ref={node => {
                         color = node;
-                    }} placeholder="Color" defaultValue={"#000000"}  onChange={this.handleTextColorChange}/>
+                    }} placeholder="Color" defaultValue={"#000000"}  onChange={this.props.handleTextColorChange}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="fontSize">Font Size:</label>
                     <input type="number" min="5" max="100" className="form-control" name="fontSize" ref={node => {
                         fontSize = node;
-                    }} placeholder="Font Size" defaultValue={30}  onChange={this.handleFontSizeChange}/>
+                    }} placeholder="Font Size" defaultValue={30}  onChange={this.props.handleFontSizeChange}/>
                 </div>
             </div> 
             )}
@@ -154,15 +148,27 @@ class TextOptions extends React.Component{
         );
     }
 }
+        class TextDivs extends React.Component {
+            render() {
+                return (
+                    <div> 
+                        {
+                            this.props.text.map(function(textType) {
+                                return <div> {textType["text"]}</div>
+                            })
+                        }
+                    </div>
+
+                );           
+            }
+        }
 
         class AddText extends React.Component {
             render() {
                 return (
-                    <form className="form-inline">
                         <div className="form-group">
                             <button className="btn btn-primary" onClick={this.props.addText}> Add Text</button>
                         </div>
-                    </form>
                 );
             }
         }
@@ -194,6 +200,7 @@ class TextOptions extends React.Component{
                                     borderWidth.value = "";
                                     padding.value = "";
                                     margin.value = "";
+                                   
                                 }}>
                                     <div className="form-group">
                                         <label htmlFor="height">Height:</label>
@@ -207,7 +214,7 @@ class TextOptions extends React.Component{
                                             width = node;
                                         }} placeholder="Width" defaultValue={500}  onChange={this.handleWidthChange}/>
                                     </div>
-                                    <TextOptions textNum = {this.state.textNum} />
+                                    <TextOptions textNum = {this.state.textNum} handleTextChange = {this.handleTextChange} handleTextColorChange = {this.handleTextColorChange} handleFontSizeChange = {this.handleFontSizeChange} />
                                     <AddText addText = {this.addText}/>
                                     <div className="form-group">
                                         <label htmlFor="backgroundColor">Background Color:</label>
@@ -253,14 +260,12 @@ class TextOptions extends React.Component{
                             </div>
                         </div>
                         <div className= "col items-align-center" style={{overflow: "auto"}}>
-                            <div style={{ height: this.state.height + "px", width: this.state.width + "px", color: this.state.color, fontSize: this.state.fontSize + "pt",
+                            <div style={{ height: this.state.height + "px", width: this.state.width + "px", 
                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
                                         borderStyle: "solid"}}>
-                                        <div> 
-                                        {this.state.text['text']}
-                                        </div>
+                                        <TextDivs textNum = {this.state.textNum} text = {this.state.text}/>
                             </div>
                         </div>
                         </div>

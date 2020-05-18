@@ -6,6 +6,7 @@ var TextSchema = new mongoose.Schema({
   fontSize: { type: Number, min: 2, max: 144 },
   x: { type: Number, min: 0, max: 1000 },
   y: { type: Number, min: 0, max: 1000 }
+  
 });
 
 var LogoSchema = new mongoose.Schema({
