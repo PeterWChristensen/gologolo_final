@@ -9,12 +9,18 @@ var TextSchema = new mongoose.Schema({
   
 });
 
+var ImageSchema = new mongoose.Schema({
+  url: String,
+  width: { type: Number, min: 10, max: 1500},
+  height: { type: Number, min: 10, max: 1500}
+})
+
 var LogoSchema = new mongoose.Schema({
   id: String,
   height: { type: Number, min: 10, max: 1000 },
   width: { type: Number, min: 10, max: 1000 },
   text: [TextSchema],
-  images: [String],
+  images: [ImageSchema],
   backgroundColor: String,
   borderColor: String,
   borderRadius: { type: Number, min: 0, max: 150 },

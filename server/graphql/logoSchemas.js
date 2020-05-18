@@ -58,6 +58,41 @@ var createTextType = new GraphQLInputObjectType({
     }
 });
 
+var imageType = new GraphQLObjectType ({
+    name: 'image',
+    fields: function () {
+        return {
+            url: {
+                type: GraphQLString
+            },
+            width: {
+                type: GraphQLInt
+            },
+            height: {
+                type: GraphQLInt
+            }
+        }
+    }
+});
+
+
+var createImageType = new GraphQLInputObjectType ({
+    name: 'imageInput',
+    fields: function () {
+        return {
+            url: {
+                type: GraphQLString
+            },
+            width: {
+                type: GraphQLInt
+            },
+            height: {
+                type: GraphQLInt
+            }
+        }
+    }
+});
+
 var logoType = new GraphQLObjectType({
     name: 'logo',
     fields: function () {
@@ -75,7 +110,7 @@ var logoType = new GraphQLObjectType({
                 type: new GraphQLList(textType)
             },
             images: {
-                type: new GraphQLList(GraphQLString)
+                type: new GraphQLList(imageType)
             },
             backgroundColor: {
                 type: GraphQLString
@@ -153,7 +188,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(new GraphQLList(createTextType))
                     },
                     images: {
-                        type: new GraphQLList(new GraphQLNonNull (GraphQLString))
+                        type: new GraphQLList(new GraphQLNonNull(createImageType))
                     },
                     backgroundColor: {
                         type: new GraphQLNonNull(GraphQLString)
@@ -200,7 +235,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(new GraphQLList(createTextType))
                     },
                     images: {
-                        type: new GraphQLList(new GraphQLNonNull(GraphQLString))
+                        type: new GraphQLList(new GraphQLNonNull(createImageType))
                     },
                     backgroundColor: {
                         type: new GraphQLNonNull(GraphQLString)

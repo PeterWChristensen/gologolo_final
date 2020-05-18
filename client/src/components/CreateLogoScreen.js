@@ -8,6 +8,7 @@ const ADD_LOGO = gql`
         $height: Int!,
         $width: Int!,
         $text: [textInput]!,
+        $images: [imageInput]!,
         $backgroundColor: String!,
         $borderColor: String!,
         $borderRadius: Int!,
@@ -18,6 +19,7 @@ const ADD_LOGO = gql`
             height: $height,
             width: $width,
             text: $text,
+            images: $images,
             backgroundColor: $backgroundColor,
             borderColor: $borderColor,
             borderRadius: $borderRadius,
@@ -63,13 +65,42 @@ class TextOptions extends React.Component{
     }
 }
 
+class ImageOptions extends React.Component {
+    render() {
+        return (
+            <div>
+                {
+                this.props.images.map((images, index) => {
+                    return (
+                        <div className="container" style={{margin : "1em"}}> 
+                            <div className="form-group">                           
+                                <label htmlFor="width">Width:</label>
+                                <input type="range" min="1" max="1500" defaultValue={this.props.images[index]["width"]}
+                                 onChange={(e)=>this.props.handleImageWidthChange(e, index)}/>
+                            </div>
+                            <div className="form-group">                           
+                                <label htmlFor="height">Height</label>
+                                <input type="range" min="1" max="1500" defaultValue={this.props.images[index]["height"]}
+                                 onChange={(e)=>this.props.handleImageHeightChange(e, index)}/>
+                            </div>
+                            <button className="btn btn-primary" onClick={(e)=>this.props.handleDeleteImage(index)}>Delete Image</button>
+                        </div>
+                    )
+
+                })
+                }
+            </div>
+        );
+    }
+}
+
 class ImageDivs extends React.Component {
     render() {
         return (
             <div>
                 {
-                    this.props.images.map(function(url) {
-                       return <img src={url} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png"/>
+                    this.props.images.map(function(image) {
+                       return <img src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
                     })
                 }
             </div>
@@ -184,9 +215,28 @@ class CreateLogoScreen extends Component {
             //this.setState({ ["text" + this.state.textNum] : "GoLogoLo", ["color" + this.state.textNum] : "#000000", ["fontSize" + this.state.textNum] : 30})
      }
 
-     addImage = (url) => {
-        let urls = this.state.images.concat(url);
-        this.setState({ images: urls});
+     addImage = (newURL) => {
+        let newImage = this.state.images.concat([{ url : newURL, width : 500, height : 500}]);
+        this.setState({ images: newImage});
+     }
+
+     handleImageWidthChange = (event, index) => {
+        console.log("handlehandleImageWidthChangeComplete to " + event.target.value);
+         let oldImage = this.state.images[index];
+         oldImage["width"] = event.target.value;
+         this.setState({ images : this.state.images});
+     }
+
+     handleImageHeightChange = (event, index) => {
+        console.log("handlehandleImageHeightChangeComplete to " + event.target.value);
+        let oldImage = this.state.images[index];
+        oldImage["height"] = event.target.value;
+        this.setState({ images : this.state.images});
+    }
+
+     handleDeleteImage = (index) => {
+         delete this.state.images[index];
+         this.setState({ images : this.state.images});
      }
  
      handleDeleteTextOptions = (index) => {
@@ -209,7 +259,7 @@ class CreateLogoScreen extends Component {
             render() {
                 let url = "";
                 return (
-                        <div>
+                        <div style={{margin:"1em"}}>
                             <input type="text" placeholder="Image URL" onChange={(event) => {url = event.target.value}}/>
                             <button className="btn btn-primary" onClick={(e)=>this.props.addImage(url)}> Add Image</button>
                         </div>
@@ -261,6 +311,7 @@ class CreateLogoScreen extends Component {
                                     </div>
                                     <TextOptions textNum = {this.state.textNum} text = {this.state.text} handleDeleteTextOptions = {this.handleDeleteTextOptions} handleTextChange = {this.handleTextChange} handleTextColorChange = {this.handleTextColorChange} handleFontSizeChange = {this.handleFontSizeChange} />
                                     <AddText addText = {this.addText}/>
+                                    <ImageOptions images = {this.state.images} handleImageHeightChange = {this.handleImageHeightChange} handleImageWidthChange = {this.handleImageWidthChange} handleDeleteImage = {this.handleDeleteImage}/>
                                     <AddImage addImage = {this.addImage}/>
                                     <div className="form-group">
                                         <label htmlFor="backgroundColor">Background Color:</label>
