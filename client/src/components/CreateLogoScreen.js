@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import gql from "graphql-tag";
 import { Mutation, graphql } from "react-apollo";
 import { Link } from 'react-router-dom';
+import Draggable from 'react-draggable';
+
 
 const ADD_LOGO = gql`
     mutation AddLogo(
@@ -100,7 +102,11 @@ class ImageDivs extends React.Component {
             <div>
                 {
                     this.props.images.map(function(image) {
-                       return <img src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
+                       return (
+                          <Draggable>
+                       <img src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
+                        </Draggable>
+                       );
                     })
                 }
             </div>
@@ -114,7 +120,11 @@ class TextDivs extends React.Component {
             <div> 
                 {
                     this.props.text.map(function(textType) {
-                        return <div style = {{color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
+                        return (
+                        <Draggable> 
+                        <div style = {{color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
+                        </Draggable>
+                        );
                     })
                 }
             </div>
