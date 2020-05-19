@@ -101,10 +101,10 @@ class ImageDivs extends React.Component {
         return (
             <div>
                 {
-                    this.props.images.map(function(image) {
+                    this.props.images.map((image, index) => {
                        return (
-                          <Draggable>
-                       <img src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
+                          <Draggable onStop={(e)=>this.props.handleDragNDropImage(e, index)}>
+                       <img style = {{position : "relative", left : image["x"] + "px", top : image["y"] + "px", }} src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
                         </Draggable>
                        );
                     })
@@ -119,10 +119,10 @@ class TextDivs extends React.Component {
         return (
             <div> 
                 {
-                    this.props.text.map(function(textType) {
+                    this.props.text.map((textType, index) => {
                         return (
-                        <Draggable> 
-                        <div style = {{color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
+                        <Draggable onStop={(e)=>this.props.handleDragNDropText(e, index)}> 
+                        <div style = {{position : "relative", left : textType["x"] + "px", top : textType["y"] + "px", color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
                         </Draggable>
                         );
                     })
@@ -220,13 +220,13 @@ class CreateLogoScreen extends Component {
      addText = () => {
             let x = this.state.textNum + 1;
             this.setState( {textNum : x});
-            let list = this.state.text.concat([{ text : "GoLogoLo", color : "#000000", fontSize : 30, x : 500, y : 500}]);
+            let list = this.state.text.concat([{ text : "GoLogoLo", color : "#000000", fontSize : 30, x : 0, y : 0}]);
             this.setState({ text: list});
             //this.setState({ ["text" + this.state.textNum] : "GoLogoLo", ["color" + this.state.textNum] : "#000000", ["fontSize" + this.state.textNum] : 30})
      }
 
      addImage = (newURL) => {
-        let newImage = this.state.images.concat([{ url : newURL, width : 500, height : 500}]);
+        let newImage = this.state.images.concat([{ url : newURL, width : 500, height : 500, x : 0, y : 0}]);
         this.setState({ images: newImage});
      }
 
@@ -253,6 +253,22 @@ class CreateLogoScreen extends Component {
          delete this.state.text[index];
          this.setState({ text : this.state.text});
      }
+
+     handleDragNDropText = (event, index) => {
+         let oldText = this.state.text[index];
+         oldText["x"] = event.layerX;
+         oldText["y"] = event.layerY;
+         console.log(event);
+         this.setState({ text : this.state.text});
+     }
+
+     handleDragNDropImage = (event, index) => {
+        let oldImage = this.state.text[index];
+        oldImage["x"] = event.layerX;
+        oldImage["y"] = event.layerY;
+        this.setState({ images : this.state.images});
+        //oldText["x"] = this.props.DraggableData.x;
+    }
 
     render() {
         let height, width, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
@@ -370,10 +386,10 @@ class CreateLogoScreen extends Component {
                             <div style={{ height: this.state.height + "px", width: this.state.width + "px", 
                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
-                                        padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto", position: "sticky",
+                                        padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
                                         borderStyle: "solid"}}>
-                                        <TextDivs textNum = {this.state.textNum} text = {this.state.text}/>
-                                        <ImageDivs images = {this.state.images}/>
+                                        <TextDivs handleDragNDropText = {this.handleDragNDropText} handleDragNDropImage = {this.handleDragNDropImage} textNum = {this.state.textNum} text = {this.state.text}/>
+                                        <ImageDivs handleDragNDropText = {this.handleDragNDropText} handleDragNDropImage = {this.handleDragNDropImage} images = {this.state.images}/>
                             </div>
                         </div>
                         </div>

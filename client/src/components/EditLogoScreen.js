@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
+import Draggable from 'react-draggable';
 
 const GET_LOGO = gql`
     query logo($logoId: String) {
@@ -10,7 +11,7 @@ const GET_LOGO = gql`
             height
             width
             text { text color fontSize x y}
-            images { url width height}
+            images { url width height x y}
             backgroundColor
             borderColor
             borderRadius
@@ -89,9 +90,12 @@ class TextDivs extends React.Component {
         return (
             <div> 
                 {
-                    this.props.text.map(function(textType) {
-                        return <div style = {{color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
-                    })
+                    this.props.text.map((textType, index) => {
+                        return (
+                        <Draggable onStop={(e)=>this.props.handleDragNDropText(e, index)}> 
+                            <div style = {{position : "relative", left : textType["x"] + "px", top : textType["y"] + "px", color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
+                        </Draggable>
+                        );           })
                 }
             </div>
         );           
@@ -133,9 +137,12 @@ class ImageDivs extends React.Component {
         return (
             <div>
                 {
-                    this.props.images.map(function(image) {
-                       return <img src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
-                    })
+                    this.props.images.map((image, index) => {
+                        return (
+                        <Draggable onStop={(e)=>this.props.handleDragNDropImage(e, index)}>
+                            <img style = {{position : "relative", left : image["x"] + "px", top : image["y"] + "px", }} src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
+                        </Draggable>
+                         );                    })
                 }
             </div>
         );
@@ -265,6 +272,22 @@ class EditLogoScreen extends Component {
          this.setState({ images : this.state.images});
      }
 
+     handleDragNDropText = (event, index) => {
+        let oldText = this.state.text[index];
+        oldText["x"] = event.layerX;
+        oldText["y"] = event.layerY;
+        console.log(event);
+        this.setState({ text : this.state.text});
+    }
+
+    handleDragNDropImage = (event, index) => {
+       let oldImage = this.state.text[index];
+       oldImage["x"] = event.layerX;
+       oldImage["y"] = event.layerY;
+       this.setState({ images : this.state.images});
+       //oldText["x"] = this.props.DraggableData.x;
+   }
+
     render() {
         let height, width, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
         class AddText extends React.Component {
@@ -335,13 +358,13 @@ class EditLogoScreen extends Component {
                                                     <label htmlFor="height">Height:</label>
                                                     <input type="number" className="form-control" name="height" ref={node => {
                                                         height= node;
-                                                    }} placeholder="Height" defaultValue={200}  onChange={this.handleHeightChange}/>
+                                                    }} placeholder="Height" defaultValue={this.state.height}  onChange={this.handleHeightChange}/>
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="width">Width:</label>
                                                     <input type="number" className="form-control" name="width" ref={node => {
                                                         width = node;
-                                                    }} placeholder="Width" defaultValue={500}  onChange={this.handleWidthChange}/>
+                                                    }} placeholder="Width" defaultValue={this.state.width}  onChange={this.handleWidthChange}/>
                                                 </div>
                                                 <TextOptions textNum = {this.state.textNum} text = {this.state.text} handleDeleteTextOptions = {this.handleDeleteTextOptions} handleTextChange = {this.handleTextChange} handleTextColorChange = {this.handleTextColorChange} handleFontSizeChange = {this.handleFontSizeChange} />
                                                 <AddText addText = {this.addText}/>
@@ -396,8 +419,8 @@ class EditLogoScreen extends Component {
                                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
                                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",
                                                         borderStyle: "solid"}}>
-                                                        <TextDivs textNum = {this.state.textNum} text = {this.state.text}/>
-                                                        <ImageDivs images = {this.state.images}/>
+                                                        <TextDivs handleDragNDropText = {this.handleDragNDropText} handleDragNDropImage = {this.handleDragNDropImage} textNum = {this.state.textNum} text = {this.state.text}/>
+                                                        <ImageDivs handleDragNDropText = {this.handleDragNDropText} handleDragNDropImage = {this.handleDragNDropImage} images = {this.state.images}/>
                                         </div>
                                     </div>
                                     </div>

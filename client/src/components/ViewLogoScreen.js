@@ -37,7 +37,7 @@ class TextDivs extends React.Component {
             <div> 
                 {
                     this.props.text.map(function(textType) {
-                        return <div style = {{color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
+                        return <div style = {{position : "relative", left : textType["x"] + "px", top : textType["y"] + "px", color : textType["color"], fontSize : textType["fontSize"] + "pt"}}> {textType["text"]}</div>
                     })
                 }
             </div>
@@ -50,7 +50,7 @@ class ImageDivs extends React.Component {
             <div>
                 {
                     this.props.images.map(function(image) {
-                       return <img src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
+                       return <img style = {{position : "relative", left : image["x"] + "px", top : image["y"] + "px", }} src={image["url"]} alt="https://media.geeksforgeeks.org/wp-content/uploads/20190506164011/logo3.png" width={image["width"]} height={image["height"]} />
                     })
                 }
             </div>

@@ -4,15 +4,17 @@ var TextSchema = new mongoose.Schema({
   text: String,
   color: String,
   fontSize: { type: Number, min: 2, max: 144 },
-  x: { type: Number, min: 0, max: 1000 },
-  y: { type: Number, min: 0, max: 1000 }
+  x: { type: Number, min: 0, max: 2000 },
+  y: { type: Number, min: 0, max: 2000 }
   
 });
 
 var ImageSchema = new mongoose.Schema({
   url: String,
   width: { type: Number, min: 10, max: 1500},
-  height: { type: Number, min: 10, max: 1500}
+  height: { type: Number, min: 10, max: 1500},
+  x: { type: Number, min: 0, max: 1000 },
+  y: { type: Number, min: 0, max: 1000 }
 })
 
 var LogoSchema = new mongoose.Schema({

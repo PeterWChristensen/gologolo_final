@@ -70,6 +70,12 @@ var imageType = new GraphQLObjectType ({
             },
             height: {
                 type: GraphQLInt
+            },
+            x: {
+                type: GraphQLInt
+            },
+            y: {
+                type: GraphQLInt
             }
         }
     }
@@ -87,6 +93,12 @@ var createImageType = new GraphQLInputObjectType ({
                 type: GraphQLInt
             },
             height: {
+                type: GraphQLInt
+            },
+            x: {
+                type: GraphQLInt
+            },
+            y: {
                 type: GraphQLInt
             }
         }
