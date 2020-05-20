@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import Draggable from 'react-draggable';
+import html2canvas from 'html2canvas';
 
 const GET_LOGO = gql`
     query logo($logoId: String) {
@@ -239,7 +240,7 @@ class EditLogoScreen extends Component {
     addText = () => {
         let x = this.state.textNum + 1;
         this.setState( {textNum : x});
-        let list = this.state.text.concat([{ text : "GoLogoLo", color : "#000000", fontSize : 30, x : 500, y : 500}]);
+        let list = this.state.text.concat([{ text : "GoLogoLo", color : "#000000", fontSize : 30, x : 0, y : 0}]);
         this.setState({ text: list});
         //this.setState({ ["text" + this.state.textNum] : "GoLogoLo", ["color" + this.state.textNum] : "#000000", ["fontSize" + this.state.textNum] : 30})
     }
@@ -407,6 +408,11 @@ class EditLogoScreen extends Component {
                                                     }} placeholder="Margin" defaultValue={data.logo.margin} onChange={this.handleMarginChange}/>
                                                 </div>
                                                 <button type="submit" className="btn btn-success">Submit</button>
+                                                <button style={{left:"1em", top:"1em"}} onClick={(e)=>html2canvas(document.getElementById("canvas"),{scrollY: -window.scrollY, scrollX: -window.scrollX}).then(function(canvas) { 
+                                                                var img = canvas.toDataURL("image/png");
+                                                                window.open(img);
+                                                                })
+                                                    }> Export Logo</button>
                                             </form>
                                             {loading && <p>Loading...</p>}
                                             {error && <p>Error :( Please try again</p>}
@@ -414,7 +420,7 @@ class EditLogoScreen extends Component {
                                     </div>
                                     </div>
                                     <div className= "col" style={{top: "6em", overflow: "auto"}}>
-                                        <div style={{ height: this.state.height + "px", width: this.state.width + "px",
+                                        <div id="canvas" style={{ height: this.state.height + "px", width: this.state.width + "px",
                                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",
                                                         padding: this.state.padding + "px", margin: this.state.margin + "px", overflow: "auto",

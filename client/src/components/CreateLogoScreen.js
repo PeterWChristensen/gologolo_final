@@ -145,7 +145,7 @@ class CreateLogoScreen extends Component {
              images : [],
              backgroundColor : "#ffffff",
              borderColor : "#000000",
-             borderRadius : 50,
+             borderRadius : 0,
              borderWidth : 15,
              borderStyle : "solid",
              padding : 15,
@@ -293,6 +293,7 @@ class CreateLogoScreen extends Component {
             }
         }
         
+        var proxy = require('html2canvas-proxy');
         return (
             <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/')}>
                 {(addLogo, { loading, error, data }) => (
