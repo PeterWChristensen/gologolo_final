@@ -335,7 +335,7 @@ class EditLogoScreen extends Component {
                                     <div className="col">
                                     <div className="panel panel-default">
                                         <div className="panel-heading">
-                                            <h4><Link to="/">Home</Link></h4>
+                                            <h4><Link to="/home">Home</Link></h4>
                                             <h3 className="panel-title">
                                                 Edit Logo
                                         </h3>
