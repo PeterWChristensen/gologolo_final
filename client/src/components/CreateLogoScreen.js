@@ -293,7 +293,6 @@ class CreateLogoScreen extends Component {
             }
         }
         
-        var proxy = require('html2canvas-proxy');
         return (
             <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/')}>
                 {(addLogo, { loading, error, data }) => (

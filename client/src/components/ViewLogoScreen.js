@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
+import html2canvas from 'html2canvas';
 
 const GET_LOGO = gql`
     query logo($logoId: String) {
@@ -126,11 +127,16 @@ class ViewLogoScreen extends Component {
                                             </div>
                                         )}
                                     </Mutation>
+                                    <button style={{left:"1em", top:"1em"}} onClick={(e)=>html2canvas(document.getElementById("canvasView"),{scrollY: -window.scrollY, scrollX: -window.scrollX}).then(function(canvas) { 
+                                                                var img = canvas.toDataURL("image/png");
+                                                                window.open(img);
+                                                                })
+                                                    }> Export Logo</button>
                                 </div>
                             </div>
                             </div>
                             <div className= "col" style={{top: "6em", overflow: "auto"}}>
-                                <div style={{ height: data.logo.height + "px", width: data.logo.width + "px",
+                                <div id = "canvasView" style={{ height: data.logo.height + "px", width: data.logo.width + "px",
                                           backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, 
                                           borderRadius: data.logo.borderRadius + "px", borderWidth: data.logo.borderWidth + "px",
                                           padding: data.logo.padding + "px", margin: data.logo.margin + "px", overflow: "auto",
