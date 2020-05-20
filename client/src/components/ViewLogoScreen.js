@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
@@ -111,16 +111,18 @@ class ViewLogoScreen extends Component {
                                         <dt>Last Updated:</dt>
                                         <dd>{data.logo.lastUpdate}</dd>
                                     </dl>
-                                    <Mutation mutation={DELETE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push('/')}>
+                                    <Mutation mutation={DELETE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push('/home')}>
                                         {(removeLogo, { loading, error }) => (
                                             <div>
                                                 <form
                                                     onSubmit={e => {
                                                         e.preventDefault();
                                                         removeLogo({ variables: { id: data.logo._id } });
+                                                        console.log("here");
+                                                        this.props.history.push('/home');
                                                     }}>
                                                     <Link to={`/edit/${data.logo._id}`} className="btn btn-success">Edit</Link>&nbsp;
-                                                <button type="submit" className="btn btn-danger">Delete</button>
+                                                <button type="submit" className="btn btn-danger" >Delete</button>
                                                 </form>
                                                 {loading && <p>Loading...</p>}
                                                 {error && <p>Error :( Please try again</p>}

@@ -63,6 +63,9 @@ class HomeScreen extends Component {
                                     style={styles.button}>
                                     <Link id="add_logo_button" to="/create" style={{ textDecoration: 'none', color: "#000000" }}>Create a New Logo</Link>
                                 </button>
+                                <button>
+                                    <Link to="/" style={{ textDecoration: 'none', color: "#000000" }}> Logout</Link>
+                                </button>
                             </div>
                         </div>
                         </div>

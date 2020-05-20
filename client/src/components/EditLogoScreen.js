@@ -257,14 +257,14 @@ class EditLogoScreen extends Component {
      handleImageWidthChange = (event, index) => {
         console.log("handlehandleImageWidthChangeComplete to " + event.target.value);
          let oldImage = this.state.images[index];
-         oldImage["width"] = event.target.value;
+         oldImage["width"] = parseInt(event.target.value);
          this.setState({ images : this.state.images});
      }
 
      handleImageHeightChange = (event, index) => {
         console.log("handlehandleImageHeightChangeComplete to " + event.target.value);
         let oldImage = this.state.images[index];
-        oldImage["height"] = event.target.value;
+        oldImage["height"] = parseInt(event.target.value);
         this.setState({ images : this.state.images});
     }
 
@@ -328,7 +328,7 @@ class EditLogoScreen extends Component {
                         padding: data.logo.padding, margin: data.logo.margin, editedFlag : true}) }
 
                     return (
-                        <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/`)}>
+                        <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/home`)}>
                             {(updateLogo, { loading, error }) => (
                                 <div className="container">
                                     <div className="row">
@@ -357,13 +357,13 @@ class EditLogoScreen extends Component {
                                             }}>
                                                 <div className="form-group">
                                                     <label htmlFor="height">Height:</label>
-                                                    <input type="number" className="form-control" name="height" ref={node => {
+                                                    <input type="range" min="0" max="1000" className="form-control" name="height" ref={node => {
                                                         height= node;
                                                     }} placeholder="Height" defaultValue={this.state.height}  onChange={this.handleHeightChange}/>
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="width">Width:</label>
-                                                    <input type="number" className="form-control" name="width" ref={node => {
+                                                    <input type="range" min="0" max="1000" className="form-control" name="width" ref={node => {
                                                         width = node;
                                                     }} placeholder="Width" defaultValue={this.state.width}  onChange={this.handleWidthChange}/>
                                                 </div>
@@ -419,7 +419,7 @@ class EditLogoScreen extends Component {
                                         </div>
                                     </div>
                                     </div>
-                                    <div className= "col" style={{top: "6em", overflow: "auto"}}>
+                                    <div className= "col-xl" style={{top: "6em", overflow: "auto"}}>
                                         <div id="canvas" style={{ height: this.state.height + "px", width: this.state.width + "px",
                                                         backgroundColor: this.state.backgroundColor, borderColor: this.state.borderColor, 
                                                         borderRadius: this.state.borderRadius + "px", borderWidth: this.state.borderWidth + "px",

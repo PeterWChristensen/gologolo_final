@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 import { Mutation, graphql } from "react-apollo";
 import { Link } from 'react-router-dom';
 import Draggable from 'react-draggable';
+import { useHistory } from "react-router-dom";
 
 
 const ADD_LOGO = gql`
@@ -233,14 +234,14 @@ class CreateLogoScreen extends Component {
      handleImageWidthChange = (event, index) => {
         console.log("handlehandleImageWidthChangeComplete to " + event.target.value);
          let oldImage = this.state.images[index];
-         oldImage["width"] = event.target.value;
+         oldImage["width"] = parseInt(event.target.value);
          this.setState({ images : this.state.images});
      }
 
      handleImageHeightChange = (event, index) => {
         console.log("handlehandleImageHeightChangeComplete to " + event.target.value);
         let oldImage = this.state.images[index];
-        oldImage["height"] = event.target.value;
+        oldImage["height"] = parseInt(event.target.value);
         this.setState({ images : this.state.images});
     }
 
@@ -292,9 +293,8 @@ class CreateLogoScreen extends Component {
                 );
             }
         }
-        
         return (
-            <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/')}>
+            <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/home')}>
                 {(addLogo, { loading, error, data }) => (
                     <div className="container">
                         <div className="row">
@@ -309,6 +309,8 @@ class CreateLogoScreen extends Component {
                             <div className="panel-body">
                                 <form onSubmit={e => {
                                     e.preventDefault();
+                                    //let history = useHistory();
+                                    this.props.history.push('/home');
                                     addLogo({ variables: { height: parseInt(height.value), width: parseInt(width.value), text: this.state.text, images: this.state.images,
                                                            backgroundColor: backgroundColor.value, borderColor: borderColor.value, 
                                                            borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value),
@@ -321,17 +323,17 @@ class CreateLogoScreen extends Component {
                                     borderWidth.value = "";
                                     padding.value = "";
                                     margin.value = "";
-                                   
+                                    this.props.history.push('/home');
                                 }}>
                                     <div className="form-group">
                                         <label htmlFor="height">Height:</label>
-                                        <input type="number" className="form-control" name="height" ref={node => {
+                                        <input type="range" min="0" max="1000" className="form-control" name="height" ref={node => {
                                             height= node;
                                         }} placeholder="Height" defaultValue={200}  onChange={this.handleHeightChange}/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="width">Width:</label>
-                                        <input type="number" className="form-control" name="width" ref={node => {
+                                        <input type="range" min="0" max="1000" className="form-control" name="width" ref={node => {
                                             width = node;
                                         }} placeholder="Width" defaultValue={500}  onChange={this.handleWidthChange}/>
                                     </div>
